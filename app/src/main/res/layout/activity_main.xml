@@ -1,17 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.bhavanawagh.newsapp_mvvm_architecture.ui.main.MainViewModel" />
+    </data>
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/screen_margin"
+        android:layout_marginRight="@dimen/screen_margin"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/top_headlines"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:onClick='@{() -> viewModel.onButtonClicked(@string/top_headlines)}'
+            android:text="@string/top_headlines" />
+
+        <Button
+            android:id="@+id/news_sources"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:onClick="@{() -> viewModel.onButtonClicked(@string/news_sources)}"
+            android:text="@string/news_sources" />
+
+        <Button
+            android:id="@+id/countries"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:onClick='@{() -> viewModel.onButtonClicked(@string/country_selection)}'
+            android:text="@string/country_selection" />
+
+        <Button
+            android:id="@+id/language"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:onClick='@{() -> viewModel.onButtonClicked(@string/language_selection)}'
+            android:text="@string/language_selection" />
+
+        <Button
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:onClick='@{() -> viewModel.onButtonClicked(@string/search_screen)}'
+            android:text="@string/search_screen" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
