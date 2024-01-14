@@ -1,32 +1,25 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.main
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import com.bhavanawagh.newsapp_mvvm_architecture.R
-import com.bhavanawagh.newsapp_mvvm_architecture.databinding.ActivityMainBinding
-import com.bhavanawagh.newsapp_mvvm_architecture.di.component.DaggerMainActivityComponent
-import com.bhavanawagh.newsapp_mvvm_architecture.di.module.MainActivityModule
-import javax.inject.Inject
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineActivity
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var mainViewModel: MainViewModel
+   lateinit var topHeadlineBtn:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getDependencies()
-        val binding: ActivityMainBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.lifecycleOwner = this
-        binding.viewModel = mainViewModel
+        setContentView(R.layout.activity_main)
+        topHeadlineBtn= findViewById(R.id.top_headlines)
+        topHeadlineBtn.setOnClickListener {
+            startActivity(Intent(this, TopHeadlineActivity::class.java))
+            finish()
+
+        }
     }
 
 
-    private fun getDependencies() {
-        DaggerMainActivityComponent.builder()
-            .mainActivityModule(MainActivityModule(this))
-            .build()
-            .inject(this)
-    }
 }

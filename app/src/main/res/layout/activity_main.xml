@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-        <variable
-            name="viewModel"
-            type="com.bhavanawagh.newsapp_mvvm_architecture.ui.main.MainViewModel" />
-    </data>
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -62,4 +58,4 @@
             android:onClick='@{() -> viewModel.onButtonClicked(@string/search_screen)}'
             android:text="@string/search_screen" />
     </androidx.appcompat.widget.LinearLayoutCompat>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
