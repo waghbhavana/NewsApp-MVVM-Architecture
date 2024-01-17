@@ -1,9 +1,13 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -16,11 +20,14 @@ import com.bhavanawagh.newsapp_mvvm_architecture.databinding.ActivityTopHeadline
 import com.bhavanawagh.newsapp_mvvm_architecture.di.component.DaggerActivityComponent
 import com.bhavanawagh.newsapp_mvvm_architecture.di.module.ActivityModule
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
-import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 class TopHeadlineActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var context: Context
 
     @Inject
     lateinit var viewModel: TopHeadlineViewModel
@@ -30,61 +37,74 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTopHeadlineBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         injectDependencies()
         setContentView(R.layout.activity_top_headline)
-        binding= ActivityTopHeadlineBinding.inflate(layoutInflater)
+        binding = ActivityTopHeadlineBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpUI()
-        viewModel.fetchTopHeadlines(AppConstants.COUNTRY_US)
+        fetchHeadlines()
         setUpObserver()
     }
 
-    private fun setUpUI(){
-       val recyclerView= binding.recyclerView
-        recyclerView.layoutManager= LinearLayoutManager(this)
+    private fun fetchHeadlines() {
+
+        if (intent.hasExtra(EXTRAS_COUNTRY)) {
+            val country = intent.getStringExtra(EXTRAS_COUNTRY)
+            country?.let {
+                viewModel.fetchTopHeadlines(it)
+            }
+        }
+        if (intent.hasExtra(EXTRAS_SOURCE)) {
+            val source = intent.getStringExtra(EXTRAS_SOURCE)
+            source?.let {
+                viewModel.fetchTopHeadlinesBySource(it)
+            }
+        }
+    }
+
+    private fun setUpUI() {
+        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(
             DividerItemDecoration(
                 recyclerView.context,
                 (recyclerView.layoutManager as LinearLayoutManager).orientation
             )
         )
-        recyclerView.adapter= adapter
+        recyclerView.adapter = adapter
     }
 
-    private  fun setUpObserver(){
-        lifecycleScope.launch(){
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.uiState.collect{
-                    when(it){
-                        is UiState.Success->{
+    private fun setUpObserver() {
+        lifecycleScope.launch() {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    when (it) {
+                        is UiState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             renderList(it.data)
-                            binding.recyclerView.visibility= View.VISIBLE
+                            binding.recyclerView.visibility = View.VISIBLE
                         }
-                        is UiState.Loading->{
+
+                        is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
-                            binding.recyclerView.visibility= View.GONE
-                        }
-                        is UiState.Error->{
-                            binding.progressBar.visibility=View.GONE
-                            Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_SHORT).show()
+                            binding.recyclerView.visibility = View.GONE
                         }
 
-                        else -> {
-
-                                binding.progressBar.visibility=View.GONE
-                                Toast.makeText(this@TopHeadlineActivity, "it.message", Toast.LENGTH_SHORT).show()
-
+                        is UiState.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_SHORT)
+                                .show()
                         }
+
+
                     }
                 }
             }
         }
     }
 
-    private fun renderList(list:List<Article>){
+    private fun renderList(list: List<Article>) {
         adapter.addArticleData(list)
         adapter.notifyDataSetChanged()
     }
@@ -95,4 +115,13 @@ class TopHeadlineActivity : AppCompatActivity() {
             .applicationComponent((application as NewsApplication).applicationComponent)
             .activityModule(ActivityModule(this)).build().inject(this)
     }
+
+
+    companion object {
+
+        const val EXTRAS_COUNTRY = "EXTRAS_COUNTRY"
+        const val EXTRAS_SOURCE = "EXTRAS_SOURCE"
+
+    }
+
 }

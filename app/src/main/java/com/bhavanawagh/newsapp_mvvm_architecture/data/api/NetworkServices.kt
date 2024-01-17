@@ -1,5 +1,6 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.api
 
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.NewsSourceResponse
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.TopHeadlinesResponse
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.API_KEY
 import retrofit2.http.GET
@@ -13,4 +14,14 @@ interface NetworkServices {
     @Headers("X-api-key: $API_KEY")
     @GET("top-headlines")
     suspend fun getTopHeadlines(@Query("country") country:String):TopHeadlinesResponse
+
+
+    @Headers("X-api-key: $API_KEY")
+    @GET("top-headlines/sources")
+    suspend fun getNewsSources():NewsSourceResponse
+
+    @Headers("X-api-key: $API_KEY")
+    @GET("top-headlines")
+    suspend fun getTopHeadlinesBySource(@Query("sources") sources:String):TopHeadlinesResponse
+
 }
