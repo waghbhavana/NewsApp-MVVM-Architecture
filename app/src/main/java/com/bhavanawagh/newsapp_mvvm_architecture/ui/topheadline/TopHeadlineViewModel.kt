@@ -42,4 +42,16 @@ class TopHeadlineViewModel @Inject constructor(private val repository: Repositor
                 }
         }
     }
+
+    fun fetchTopHeadlinesByLanguage(language: String) {
+        viewModelScope.launch {
+            repository.getTopHeadlinesByLanguage(language)
+                .catch {
+                    _uiState.value = UiState.Error(it.toString())
+                }
+                .collect {
+                    _uiState.value = UiState.Success(it)
+                }
+        }
+    }
 }

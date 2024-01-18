@@ -8,6 +8,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.di.ActivityContext
 import com.bhavanawagh.newsapp_mvvm_architecture.di.ApplicationContext
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ViewModelProviderFactory
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryAdapter
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageAdapter
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourcesAdapter
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourcesViewModel
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineAdapter
@@ -50,5 +51,8 @@ class ActivityModule(private val activity: AppCompatActivity) {
 
     @Provides
     fun provideCountryAdapter()= CountryAdapter(activity,ArrayList())
+
+    @Provides
+    fun provideLanguageAdapter()= LanguageAdapter(activity, ArrayList())
 
 }

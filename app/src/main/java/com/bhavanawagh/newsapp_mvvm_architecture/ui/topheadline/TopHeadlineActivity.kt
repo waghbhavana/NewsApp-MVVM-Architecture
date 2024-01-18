@@ -39,7 +39,6 @@ class TopHeadlineActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
-        setContentView(R.layout.activity_top_headline)
         binding = ActivityTopHeadlineBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpUI()
@@ -59,6 +58,12 @@ class TopHeadlineActivity : AppCompatActivity() {
             val source = intent.getStringExtra(EXTRAS_SOURCE)
             source?.let {
                 viewModel.fetchTopHeadlinesBySource(it)
+            }
+        }
+        if (intent.hasExtra(EXTRAS_LANGUAGE)) {
+            val source = intent.getStringExtra(EXTRAS_LANGUAGE)
+            source?.let {
+                viewModel.fetchTopHeadlinesByLanguage(it)
             }
         }
     }
@@ -121,6 +126,7 @@ class TopHeadlineActivity : AppCompatActivity() {
 
         const val EXTRAS_COUNTRY = "EXTRAS_COUNTRY"
         const val EXTRAS_SOURCE = "EXTRAS_SOURCE"
+        const val EXTRAS_LANGUAGE = "EXTRAS_LANGUAGE"
 
     }
 

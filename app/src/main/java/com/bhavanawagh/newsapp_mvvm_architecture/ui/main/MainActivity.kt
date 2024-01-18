@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.ActivityMainBinding
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryActivity
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageActivity
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourceActivity
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineActivity
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
@@ -32,6 +33,10 @@ class MainActivity : AppCompatActivity() {
         }
         binding.countries.setOnClickListener{
             startActivity(Intent(this,CountryActivity::class.java))
+
+        }
+        binding.language.setOnClickListener{
+            startActivity(Intent(this,LanguageActivity::class.java))
 
         }
     }

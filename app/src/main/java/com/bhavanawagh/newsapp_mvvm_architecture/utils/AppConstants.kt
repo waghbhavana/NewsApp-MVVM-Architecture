@@ -1,6 +1,7 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.utils
 
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
 
 object AppConstants {
     const val API_KEY= "894665cd6f98442d967bb5a985a9ad26"
@@ -60,5 +61,21 @@ object AppConstants {
         Country("United States", "us"),
         Country("Venezuela", "ve"),
         Country("South Africa", "za")
+    )
+
+    val languageList = listOf(
+        Language("Arabic", "ar"),
+        Language("German", "de"),
+        Language("English", "en"),
+        Language("Spanish", "es"),
+        Language("French", "fr"),
+        Language("Hebrew", "he"),
+        Language("Italian", "it"),
+        Language("Dutch", "nl"),
+        Language("Norwegian", "no"),
+        Language("Portuguese", "pt"),
+        Language("Russian", "ru"),
+        Language("Swedish", "sv"),
+        Language("Chinese", "zh")
     )
 }
