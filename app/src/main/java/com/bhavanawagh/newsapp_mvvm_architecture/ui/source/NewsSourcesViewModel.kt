@@ -1,9 +1,8 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.source
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bhavanawagh.newsapp_mvvm_architecture.Source
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.Repository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow

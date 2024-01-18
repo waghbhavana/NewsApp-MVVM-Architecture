@@ -1,6 +1,6 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.repository
 
-import com.bhavanawagh.newsapp_mvvm_architecture.Source
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkServices
 import kotlinx.coroutines.flow.Flow

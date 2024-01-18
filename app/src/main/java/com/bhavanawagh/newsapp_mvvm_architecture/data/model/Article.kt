@@ -1,6 +1,5 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.model
 
-import com.bhavanawagh.newsapp_mvvm_architecture.Source
 import com.google.gson.annotations.SerializedName
 
 

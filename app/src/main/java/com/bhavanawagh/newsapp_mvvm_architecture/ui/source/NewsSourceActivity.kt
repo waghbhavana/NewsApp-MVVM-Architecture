@@ -9,7 +9,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bhavanawagh.newsapp_mvvm_architecture.NewsApplication
-import com.bhavanawagh.newsapp_mvvm_architecture.Source
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.ActivityNewsSourceBinding
 import com.bhavanawagh.newsapp_mvvm_architecture.di.module.ActivityModule
 import com.bhavanawagh.newsapp_mvvm_architecture.di.component.DaggerActivityComponent
