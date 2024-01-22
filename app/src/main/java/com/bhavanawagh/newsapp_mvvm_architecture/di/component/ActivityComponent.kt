@@ -4,6 +4,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.di.ActivityScope
 import com.bhavanawagh.newsapp_mvvm_architecture.di.module.ActivityModule
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryActivity
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageActivity
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.search.SearchActivity
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourceActivity
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineActivity
 import dagger.Component
@@ -20,5 +21,7 @@ fun inject(activity: NewsSourceActivity)
 fun inject(activity: CountryActivity)
 
 fun inject(activity:LanguageActivity)
+
+fun inject(activity:SearchActivity)
 }
 

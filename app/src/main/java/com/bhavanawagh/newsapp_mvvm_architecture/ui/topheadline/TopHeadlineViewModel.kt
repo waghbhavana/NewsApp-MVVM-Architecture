@@ -54,4 +54,16 @@ class TopHeadlineViewModel @Inject constructor(private val repository: Repositor
                 }
         }
     }
+
+    fun fetchTopHeadlinesBySearch(query: String) {
+        viewModelScope.launch {
+            repository.getTopHeadlinesBySearch(query)
+                .catch {
+                    _uiState.value = UiState.Error(it.toString())
+                }
+                .collect {
+                    _uiState.value = UiState.Success(it)
+                }
+        }
+    }
 }
