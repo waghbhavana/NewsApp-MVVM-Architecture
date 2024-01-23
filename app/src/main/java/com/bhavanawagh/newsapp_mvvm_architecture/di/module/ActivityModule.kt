@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.Repository
-import com.bhavanawagh.newsapp_mvvm_architecture.di.ActivityContext
-import com.bhavanawagh.newsapp_mvvm_architecture.di.ApplicationContext
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ViewModelProviderFactory
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryAdapter
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageAdapter
@@ -32,6 +30,7 @@ class ActivityModule(private val activity: AppCompatActivity) {
                 TopHeadlineViewModel(topHeadlineRepository)
             })[TopHeadlineViewModel::class.java]
     }
+
 
     @Provides
     fun provideTopHeadlineAdapter()=TopHeadlineAdapter( ArrayList())

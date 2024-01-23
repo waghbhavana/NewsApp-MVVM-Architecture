@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 class TopHeadlineAdapter(private val articleList: ArrayList<Article>) :
     RecyclerView.Adapter<TopHeadlineAdapter.DataViewHolder>() {
 
-
     class DataViewHolder(private val binding: TopHeadlineItemLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(article: Article){
@@ -22,10 +21,10 @@ class TopHeadlineAdapter(private val articleList: ArrayList<Article>) :
             Glide.with(binding.imageViewBanner.context)
                 .load(article.urlToImage)
                 .into(binding.imageViewBanner)
-            itemView.setOnClickListener {
-                val builder = CustomTabsIntent.Builder()
+            binding.textViewReadArticle.setOnClickListener {
+                val builder = CustomTabsIntent.Builder().setShowTitle(true)
                 val customTabsIntent = builder.build()
-                customTabsIntent.launchUrl(it.context, Uri.parse(article.url))
+               customTabsIntent.launchUrl(it.context, Uri.parse(article.url))
             }
 
         }

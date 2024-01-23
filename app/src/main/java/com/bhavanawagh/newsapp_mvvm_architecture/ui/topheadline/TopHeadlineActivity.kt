@@ -2,19 +2,14 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NavUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bhavanawagh.newsapp_mvvm_architecture.NewsApplication
-import com.bhavanawagh.newsapp_mvvm_architecture.R
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.ActivityTopHeadlineBinding
 import com.bhavanawagh.newsapp_mvvm_architecture.di.component.DaggerActivityComponent
@@ -73,13 +68,7 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     private fun setUpUI() {
         val recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                recyclerView.context,
-                (recyclerView.layoutManager as LinearLayoutManager).orientation
-            )
-        )
+        recyclerView.layoutManager= StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
         binding.showErrorLayout.tryAgainBtn.setOnClickListener {
             if (countrySelected.isNotEmpty()) {
@@ -98,25 +87,31 @@ class TopHeadlineActivity : AppCompatActivity() {
                         is UiState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.showErrorLayout.errorLayout.visibility = View.GONE
-                            renderList(it.data)
-                            binding.recyclerView.visibility = View.VISIBLE
+                            if(it.data.isNotEmpty()) {
+                                renderList(it.data)
+                                binding.recyclerView.visibility = View.VISIBLE
+                                binding.noDataFound.visibility =View.GONE
+                            }else{
+                                binding.recyclerView.visibility = View.GONE
+                                binding.noDataFound.visibility =View.VISIBLE
+                            }
                         }
 
                         is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.showErrorLayout.errorLayout.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
+                            binding.noDataFound.visibility =View.GONE
                         }
 
                         is UiState.Error -> {
                             binding.progressBar.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
                             binding.showErrorLayout.errorLayout.visibility = View.VISIBLE
+                            binding.noDataFound.visibility =View.GONE
                             Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
-
-
                     }
                 }
             }
@@ -137,11 +132,9 @@ class TopHeadlineActivity : AppCompatActivity() {
 
 
     companion object {
-
         const val EXTRAS_COUNTRY = "EXTRAS_COUNTRY"
         const val EXTRAS_SOURCE = "EXTRAS_SOURCE"
         const val EXTRAS_LANGUAGE = "EXTRAS_LANGUAGE"
-
     }
 
 }

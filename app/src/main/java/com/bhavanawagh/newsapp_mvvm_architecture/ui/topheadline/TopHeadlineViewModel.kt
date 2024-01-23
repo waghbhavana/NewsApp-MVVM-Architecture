@@ -1,6 +1,5 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
@@ -56,6 +55,7 @@ class TopHeadlineViewModel @Inject constructor(private val repository: Repositor
     }
 
     fun fetchTopHeadlinesBySearch(country: String,query: String) {
+
         viewModelScope.launch {
             repository.getTopHeadlinesBySearch(country,query)
                 .catch {
