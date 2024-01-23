@@ -1,7 +1,5 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.search
 
-import android.app.SearchManager
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +21,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.di.module.ActivityModule
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineAdapter
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineViewModel
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +32,7 @@ class SearchActivity : AppCompatActivity() {
     lateinit var viewModel: TopHeadlineViewModel
     @Inject
     lateinit var adapter: TopHeadlineAdapter
+    lateinit var searchQuery:String
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
@@ -47,27 +47,24 @@ class SearchActivity : AppCompatActivity() {
         // Inflate the options menu from XML.
         val inflater = menuInflater
         inflater.inflate(R.menu.options_menu, menu)
-
-        // Get the SearchView and set the searchable configuration.
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView1=menu.findItem(R.id.actionSearch).actionView as SearchView
-//        (menu.findItem(R.id.actionSearch).actionView as SearchView).apply {
-//            // Assumes current activity is the searchable activity.
-//            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-//            setIconifiedByDefault(false) // Don't iconify the widget. Expand it by default.
-//        }
         searchView1.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    viewModel.fetchTopHeadlinesBySearch(query)
+                    searchQuery=query
+                   // viewModel.fetchTopHeadlinesBySearch(AppConstants.EXTRAS_COUNTRY,query)
                 }
                 return true
             }
 
             override fun onQueryTextChange(query: String): Boolean {
-                viewModel.fetchTopHeadlinesBySearch(query)
-                return true
+                searchQuery=query
+                if(query.isNotEmpty()) {
+                    adapter.notifyDataSetChanged();
+                    viewModel.fetchTopHeadlinesBySearch(AppConstants.EXTRAS_COUNTRY, query)
+                }
+                return false
             }
         })
 
@@ -76,6 +73,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun setUpUI() {
+        binding.newsList.progressBar.visibility=View.GONE
         val recyclerView = binding.newsList.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(
@@ -85,6 +83,9 @@ class SearchActivity : AppCompatActivity() {
             )
         )
         recyclerView.adapter = adapter
+        binding.newsList.showErrorLayout.tryAgainBtn.setOnClickListener{
+            viewModel.fetchTopHeadlinesBySearch(AppConstants.EXTRAS_COUNTRY,searchQuery)
+        }
     }
 
     private fun setUpObserver() {
@@ -94,18 +95,24 @@ class SearchActivity : AppCompatActivity() {
                     when (it) {
                         is UiState.Success -> {
                             binding.newsList.progressBar.visibility = View.GONE
-                            Log.d("renderList",it.data.toString())
+                            Log.d("renderList size", it.data.size.toString())
+                            Log.d("renderList", it.data.toString())
+
                             renderList(it.data)
                             binding.newsList.recyclerView.visibility = View.VISIBLE
+                            binding.newsList.showErrorLayout.errorLayout.visibility=View.GONE
                         }
 
                         is UiState.Loading -> {
                             binding.newsList.progressBar.visibility = View.VISIBLE
                             binding.newsList.recyclerView.visibility = View.GONE
+                            binding.newsList.showErrorLayout.errorLayout.visibility=View.GONE
                         }
 
                         is UiState.Error -> {
                             binding.newsList.progressBar.visibility = View.GONE
+                            binding.newsList.recyclerView.visibility = View.GONE
+                            binding.newsList.showErrorLayout.errorLayout.visibility=View.VISIBLE
                             Toast.makeText(this@SearchActivity, it.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -119,7 +126,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun renderList(list: List<Article>) {
         adapter.addArticleData(list)
-        adapter.notifyDataSetChanged()
+       // adapter.notifyDataSetChanged()
     }
 
 

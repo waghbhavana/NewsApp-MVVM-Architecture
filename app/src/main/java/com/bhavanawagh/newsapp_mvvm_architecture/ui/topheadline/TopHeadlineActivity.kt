@@ -35,6 +35,8 @@ class TopHeadlineActivity : AppCompatActivity() {
     @Inject
     lateinit var adapter: TopHeadlineAdapter
 
+    lateinit var countrySelected: String
+
     private lateinit var binding: ActivityTopHeadlineBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,7 @@ class TopHeadlineActivity : AppCompatActivity() {
         if (intent.hasExtra(EXTRAS_COUNTRY)) {
             val country = intent.getStringExtra(EXTRAS_COUNTRY)
             country?.let {
+                countrySelected = country
                 viewModel.fetchTopHeadlines(it)
             }
         }
@@ -78,6 +81,13 @@ class TopHeadlineActivity : AppCompatActivity() {
             )
         )
         recyclerView.adapter = adapter
+        binding.showErrorLayout.tryAgainBtn.setOnClickListener {
+            if (countrySelected.isNotEmpty()) {
+                viewModel.fetchTopHeadlines(countrySelected)
+            } else {
+                fetchHeadlines()
+            }
+        }
     }
 
     private fun setUpObserver() {
@@ -87,17 +97,21 @@ class TopHeadlineActivity : AppCompatActivity() {
                     when (it) {
                         is UiState.Success -> {
                             binding.progressBar.visibility = View.GONE
+                            binding.showErrorLayout.errorLayout.visibility = View.GONE
                             renderList(it.data)
                             binding.recyclerView.visibility = View.VISIBLE
                         }
 
                         is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
+                            binding.showErrorLayout.errorLayout.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
                         }
 
                         is UiState.Error -> {
                             binding.progressBar.visibility = View.GONE
+                            binding.recyclerView.visibility = View.GONE
+                            binding.showErrorLayout.errorLayout.visibility = View.VISIBLE
                             Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_SHORT)
                                 .show()
                         }

@@ -5,6 +5,9 @@
     <string name="country_selection">Countries</string>
     <string name="language_selection">Languages</string>
     <string name="search_screen">Search</string>
+    <string name="try_again">Try Again</string>
+    <string name="oops">Oops!</string>
+    <string name="something_went_wrong_please_try_gaian">Something went wrong please try again.</string>
 </resources>
 
 

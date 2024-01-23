@@ -31,6 +31,6 @@ interface NetworkServices {
 
     @Headers("X-api-key: $API_KEY")
     @GET("top-headlines")
-    suspend fun getTopHeadlinesBySearch(@Query("q") query:String):TopHeadlinesResponse
+    suspend fun getTopHeadlinesBySearch(@Query("country") country: String,@Query("q") query:String):TopHeadlinesResponse
 
 }

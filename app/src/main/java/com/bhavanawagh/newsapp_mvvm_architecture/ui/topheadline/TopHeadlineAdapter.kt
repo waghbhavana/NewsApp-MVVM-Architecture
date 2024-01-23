@@ -44,6 +44,7 @@ class TopHeadlineAdapter(private val articleList: ArrayList<Article>) :
     override fun getItemCount(): Int = articleList.size
 
     fun addArticleData(articles: List<Article>){
+        articleList.clear()
         articleList.addAll(articles)
     }
 }

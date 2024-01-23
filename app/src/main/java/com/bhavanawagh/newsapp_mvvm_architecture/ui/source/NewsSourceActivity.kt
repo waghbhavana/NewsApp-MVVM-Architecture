@@ -46,6 +46,9 @@ class NewsSourceActivity : AppCompatActivity() {
                 (recyclerView.layoutManager as LinearLayoutManager).orientation)
         )
         recyclerView.adapter=newsSourcesAdapter
+        binding.showErrorLayout.tryAgainBtn.setOnClickListener {
+            newsSourcesViewModel.fetchNewsSources()
+        }
     }
     private fun setUpObserver(){
         lifecycleScope.launch{
@@ -55,13 +58,18 @@ class NewsSourceActivity : AppCompatActivity() {
                         is UiState.Loading->{
                             binding.progressBar2.visibility=View.VISIBLE
                             binding.recyclerView2.visibility=View.GONE
+                            binding.showErrorLayout.errorLayout.visibility = View.GONE
                         }
                         is UiState.Success->{
                             binding.progressBar2.visibility=View.GONE
+                            binding.showErrorLayout.errorLayout.visibility = View.GONE
                             renderList(it.data)
                             binding.recyclerView2.visibility=View.VISIBLE
                         }
                         is UiState.Error->{
+                            binding.progressBar2.visibility = View.GONE
+                            binding.recyclerView2.visibility = View.GONE
+                            binding.showErrorLayout.errorLayout.visibility = View.VISIBLE
                             binding.progressBar2.visibility=View.GONE
                         }
 

@@ -55,9 +55,9 @@ class TopHeadlineViewModel @Inject constructor(private val repository: Repositor
         }
     }
 
-    fun fetchTopHeadlinesBySearch(query: String) {
+    fun fetchTopHeadlinesBySearch(country: String,query: String) {
         viewModelScope.launch {
-            repository.getTopHeadlinesBySearch(query)
+            repository.getTopHeadlinesBySearch(country,query)
                 .catch {
                     _uiState.value = UiState.Error(it.toString())
                 }

@@ -45,9 +45,9 @@ class Repository @Inject constructor (private val networkServices: NetworkServic
         }
     }
 
-    fun getTopHeadlinesBySearch(query: String) : Flow<List<Article>>{
+    fun getTopHeadlinesBySearch(country: String,query: String) : Flow<List<Article>>{
         return flow {
-            emit(networkServices.getTopHeadlinesBySearch(query))
+            emit(networkServices.getTopHeadlinesBySearch(country,query))
         }.map {
             it.articles
         }

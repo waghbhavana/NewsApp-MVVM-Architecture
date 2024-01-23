@@ -4,7 +4,8 @@ import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
 
 object AppConstants {
-    const val API_KEY= "894665cd6f98442d967bb5a985a9ad26"
+    const val API_KEY= "59268db289864425bc1ca98d11669422"
+        //"894665cd6f98442d967bb5a985a9ad26"
     const val EXTRAS_COUNTRY = "us"
 
     val countryList: List<Country> = listOf(
