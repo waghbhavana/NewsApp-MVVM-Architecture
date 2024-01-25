@@ -9,7 +9,7 @@ import retrofit2.http.Query
 import javax.inject.Singleton
 
 @Singleton
-interface NetworkServices {
+interface NetworkService {
 
     @Headers("X-api-key: $API_KEY")
     @GET("top-headlines")

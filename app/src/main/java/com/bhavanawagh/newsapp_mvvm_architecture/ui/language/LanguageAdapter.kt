@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.NewsSourceItemLayoutBinding
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineActivity
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 class LanguageAdapter (private val context: Context, private val languageList: ArrayList<Language>) :
     RecyclerView.Adapter<LanguageAdapter.DataViewHolder>() {
@@ -18,10 +19,11 @@ class LanguageAdapter (private val context: Context, private val languageList: A
         fun bind(language: Language, context: Context) {
             binding.button.text = language.name
             itemView.setOnClickListener {
-                context.startActivity(
-                    Intent(context, TopHeadlineActivity::class.java)
-                        .putExtra("EXTRAS_LANGUAGE", language.id)
-                )
+//                context.startActivity(
+//                    Intent(context, TopHeadlineActivity::class.java)
+//                        .putExtra("EXTRAS_LANGUAGE", language.id)
+//                )
+                TopHeadlineActivity.getLanguageForNewsList(context, language.id,"LANGUAGE")
             }
         }
 

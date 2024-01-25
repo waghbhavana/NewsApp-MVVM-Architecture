@@ -2,7 +2,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.di.module
 
 import android.content.Context
 import com.bhavanawagh.newsapp_mvvm_architecture.NewsApplication
-import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkServices
+import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
 import com.bhavanawagh.newsapp_mvvm_architecture.di.ApplicationContext
 import com.bhavanawagh.newsapp_mvvm_architecture.di.BaseUrl
 import dagger.Module
@@ -35,11 +35,11 @@ class ApplicationModule (private val application: NewsApplication) {
     @Provides
     fun provideNetworkService( @BaseUrl baseUrl:String,
                                gsonConverterFactory: GsonConverterFactory)
-    : NetworkServices {
+    : NetworkService {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(gsonConverterFactory)
             .build()
-            .create(NetworkServices::class.java)
+            .create(NetworkService::class.java)
     }
 }

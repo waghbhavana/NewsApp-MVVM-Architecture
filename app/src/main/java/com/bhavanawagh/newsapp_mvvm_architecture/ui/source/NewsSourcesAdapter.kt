@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.NewsSourceItemLayoutBinding
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineActivity
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 class NewsSourcesAdapter(private val context: Context, private val sourceList: ArrayList<Source>) :
     RecyclerView.Adapter<NewsSourcesAdapter.DataViewHolder>() {
@@ -19,10 +20,11 @@ class NewsSourcesAdapter(private val context: Context, private val sourceList: A
         fun bind(source: Source, context: Context) {
             binding.button.text = source.name
             itemView.setOnClickListener {
-                context.startActivity(
-                    Intent(context, TopHeadlineActivity::class.java)
-                        .putExtra("EXTRAS_SOURCE", source.id)
-                )
+//                context.startActivity(
+//                    Intent(context, TopHeadlineActivity::class.java)
+//                        .putExtra("EXTRAS_SOURCE", source.id)
+//               )
+                TopHeadlineActivity.getSourceForNewsList(context, source.id,"SOURCE")
             }
         }
 

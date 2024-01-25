@@ -23,11 +23,13 @@ class LanguageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= ActivityLanguageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpTheUI()
 
     }
+
     private fun setUpTheUI(){
         val recyclerView= binding.languageRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -36,7 +38,7 @@ class LanguageActivity : AppCompatActivity() {
                 (recyclerView.layoutManager as LinearLayoutManager).orientation)
         )
         recyclerView.adapter=languageAdapter
-        renderList(AppConstants.languageList)
+        renderList(AppConstants.LANGUAGE_LIST)
     }
 
     private fun renderList(languageList: List<Language>){
@@ -48,5 +50,9 @@ class LanguageActivity : AppCompatActivity() {
             .applicationComponent((application as NewsApplication).applicationComponent)
             .activityModule(ActivityModule(this)).build().inject(this@LanguageActivity)
 
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

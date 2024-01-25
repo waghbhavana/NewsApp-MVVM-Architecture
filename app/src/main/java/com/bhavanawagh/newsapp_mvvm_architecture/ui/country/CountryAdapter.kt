@@ -9,6 +9,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.NewsSourceItemLayoutBinding
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourcesAdapter
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineActivity
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 class CountryAdapter (private val context: Context, private val countryList: ArrayList<Country>) :
     RecyclerView.Adapter<CountryAdapter.DataViewHolder>() {
@@ -19,10 +20,11 @@ class CountryAdapter (private val context: Context, private val countryList: Arr
         fun bind(country: Country, context: Context) {
             binding.button.text = country.name
             itemView.setOnClickListener {
-                context.startActivity(
-                    Intent(context, TopHeadlineActivity::class.java)
-                        .putExtra("EXTRAS_COUNTRY", country.id)
-                )
+//                context.startActivity(
+//                    Intent(context, TopHeadlineActivity::class.java)
+//                        .putExtra("EXTRAS_COUNTRY", country.id)
+//                )
+                TopHeadlineActivity.getCountryForNewsList(context, AppConstants.EXTRAS_COUNTRY,"COUNTRY")
             }
         }
 

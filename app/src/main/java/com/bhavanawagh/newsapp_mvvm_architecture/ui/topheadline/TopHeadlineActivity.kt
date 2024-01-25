@@ -1,6 +1,7 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -34,14 +35,16 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTopHeadlineBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         injectDependencies()
+        super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = ActivityTopHeadlineBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpUI()
         fetchHeadlines()
         setUpObserver()
     }
+
 
     private fun fetchHeadlines() {
 
@@ -130,11 +133,38 @@ class TopHeadlineActivity : AppCompatActivity() {
             .activityModule(ActivityModule(this)).build().inject(this)
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
 
     companion object {
         const val EXTRAS_COUNTRY = "EXTRAS_COUNTRY"
         const val EXTRAS_SOURCE = "EXTRAS_SOURCE"
         const val EXTRAS_LANGUAGE = "EXTRAS_LANGUAGE"
+        const val COUNTRY = "COUNTRY"
+        const val SOURCE = "SOURCE"
+        const val LANGUAGE = "LANGUAGE"
+
+        fun getCountryForNewsList(context: Context,country:String,type:String){
+            context.startActivity(
+                Intent( context,TopHeadlineActivity::class.java)
+                .putExtra("EXTRAS_COUNTRY",country)
+                .putExtra("COUNTRY",type))
+        }
+        fun getLanguageForNewsList(context: Context,language:String,type:String){
+            context.startActivity(
+                Intent( context,TopHeadlineActivity::class.java)
+                    .putExtra("EXTRAS_LANGUAGE",language)
+                    .putExtra("LANGUAGE",type))
+        }
+        fun getSourceForNewsList(context: Context,source:String,type:String){
+            context.startActivity(
+                Intent( context,TopHeadlineActivity::class.java)
+                    .putExtra("EXTRAS_SOURCE",source)
+                    .putExtra("SOURCE",type))
+        }
     }
 
 }

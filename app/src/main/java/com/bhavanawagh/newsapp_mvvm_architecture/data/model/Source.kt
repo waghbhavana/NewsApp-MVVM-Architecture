@@ -3,9 +3,9 @@ package com.bhavanawagh.newsapp_mvvm_architecture.data.model
 import com.google.gson.annotations.SerializedName
 
 
-data class Source (
+data class Source(
 
-  @SerializedName("id"   ) val id   : String = "",
-  @SerializedName("name" ) val name : String = ""
+    @SerializedName("id") val id: String = "",
+    @SerializedName("name") val name: String = ""
 
 )

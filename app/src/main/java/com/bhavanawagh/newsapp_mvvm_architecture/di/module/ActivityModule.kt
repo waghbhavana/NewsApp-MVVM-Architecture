@@ -3,7 +3,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.di.module
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.Repository
+import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ViewModelProviderFactory
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryAdapter
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageAdapter
@@ -24,10 +24,10 @@ class ActivityModule(private val activity: AppCompatActivity) {
 
 
     @Provides
-    fun provideNewsListViewModel(topHeadlineRepository: Repository): TopHeadlineViewModel {
+    fun provideNewsListViewModel(topHeadlineNewsRepository: NewsRepository): TopHeadlineViewModel {
         return ViewModelProvider(activity,
             ViewModelProviderFactory(TopHeadlineViewModel::class) {
-                TopHeadlineViewModel(topHeadlineRepository)
+                TopHeadlineViewModel(topHeadlineNewsRepository)
             })[TopHeadlineViewModel::class.java]
     }
 
@@ -38,10 +38,10 @@ class ActivityModule(private val activity: AppCompatActivity) {
 
 
     @Provides
-    fun provideNewsSourcesViewModel(topHeadlineRepository: Repository): NewsSourcesViewModel {
+    fun provideNewsSourcesViewModel(topHeadlineNewsRepository: NewsRepository): NewsSourcesViewModel {
         return ViewModelProvider(activity,
             ViewModelProviderFactory(NewsSourcesViewModel::class) {
-                NewsSourcesViewModel(topHeadlineRepository)
+                NewsSourcesViewModel(topHeadlineNewsRepository)
             })[NewsSourcesViewModel::class.java]
     }
 

@@ -3,13 +3,13 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.source
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
-import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.Repository
+import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class NewsSourcesViewModel(private val repository: Repository) : ViewModel() {
+class NewsSourcesViewModel(private val newsRepository: NewsRepository) : ViewModel() {
 
 
     private val _uiState = MutableStateFlow<UiState<List<Source>>>(UiState.Loading)
@@ -18,7 +18,7 @@ class NewsSourcesViewModel(private val repository: Repository) : ViewModel() {
 
     fun fetchNewsSources() {
         viewModelScope.launch {
-            repository.getNewsSources()
+            newsRepository.getNewsSources()
                 .catch {
                     uiState.value = UiState.Error(it.message.toString())
                 }

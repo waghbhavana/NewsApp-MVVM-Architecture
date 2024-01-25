@@ -30,6 +30,7 @@ class NewsSourceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding=ActivityNewsSourceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpUI()
@@ -89,6 +90,9 @@ class NewsSourceActivity : AppCompatActivity() {
             .activityModule(ActivityModule(this)).build().inject(this@NewsSourceActivity)
 
     }
-
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 
 }

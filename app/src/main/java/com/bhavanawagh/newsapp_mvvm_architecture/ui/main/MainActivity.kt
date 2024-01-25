@@ -23,10 +23,9 @@ class MainActivity : AppCompatActivity() {
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.topHeadlines.setOnClickListener {
-         startActivity(Intent(this, TopHeadlineActivity::class.java)
-               .putExtra("EXTRAS_COUNTRY",AppConstants.EXTRAS_COUNTRY))
-
-
+//         startActivity(Intent(this, TopHeadlineActivity::class.java)
+//               .putExtra("EXTRAS_COUNTRY",AppConstants.EXTRAS_COUNTRY))
+          TopHeadlineActivity.getCountryForNewsList(this,AppConstants.EXTRAS_COUNTRY,"COUNTRY")
         }
         binding.newsSources.setOnClickListener{
             startActivity(Intent(this,NewsSourceActivity::class.java))
