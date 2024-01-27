@@ -8,6 +8,8 @@ object AppConstants {
 
     //"894665cd6f98442d967bb5a985a9ad26"
     const val EXTRAS_COUNTRY = "us"
+    const val DEBOUNCE_TIMEOUT=300L
+    const val MIN_SEARCH_CHAR=3
 
     val COUNTRY_LIST: List<Country> = listOf(
         Country("United Arab Emirates", "ae"),

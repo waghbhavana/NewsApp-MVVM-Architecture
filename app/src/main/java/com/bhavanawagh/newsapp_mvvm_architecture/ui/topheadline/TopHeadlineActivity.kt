@@ -143,9 +143,7 @@ class TopHeadlineActivity : AppCompatActivity() {
         const val EXTRAS_COUNTRY = "EXTRAS_COUNTRY"
         const val EXTRAS_SOURCE = "EXTRAS_SOURCE"
         const val EXTRAS_LANGUAGE = "EXTRAS_LANGUAGE"
-        const val COUNTRY = "COUNTRY"
-        const val SOURCE = "SOURCE"
-        const val LANGUAGE = "LANGUAGE"
+
 
         fun getCountryForNewsList(context: Context,country:String,type:String){
             context.startActivity(
