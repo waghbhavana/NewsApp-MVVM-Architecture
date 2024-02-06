@@ -13,10 +13,12 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import javax.inject.Singleton
+
 
 
 @Module
@@ -48,22 +50,32 @@ class ApplicationModule(private val application: NewsApplication) {
     @Singleton
     fun provideForceInterceptor(): ForceCacheInterceptor = ForceCacheInterceptor(application)
 
+
+
     @Provides
     fun provideOkHttpClient(
         apiKeyInterceptor: ApiKeyInterceptor,
         cacheInterceptor: CacheInterceptor,
-        forceCacheInterceptor: ForceCacheInterceptor
+        forceCacheInterceptor: ForceCacheInterceptor,
+        loggerInterceptor : HttpLoggingInterceptor
     ): OkHttpClient = OkHttpClient()
         .newBuilder()
         .cache(Cache(File(application.cacheDir, "http-cache"), 10L * 1024L * 1024L))
         .addInterceptor(apiKeyInterceptor)
         .addNetworkInterceptor(cacheInterceptor)
         .addInterceptor(forceCacheInterceptor)
+        .addInterceptor(loggerInterceptor)
         .build()
 
     @Singleton
     @Provides
     fun provideGsonConvertFactory(): GsonConverterFactory = GsonConverterFactory.create()
+
+    @Singleton
+    @Provides
+    fun provideLoggerInterceptor() : HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        this.level = HttpLoggingInterceptor.Level.BODY
+    }
 
     @Singleton
     @Provides
