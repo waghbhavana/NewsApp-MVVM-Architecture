@@ -1,16 +1,17 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.di.module
 
 import android.content.Context
-import com.bhavanawagh.newsapp_mvvm_architecture.NewsApplication
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ApiKeyInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.CacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ForceCacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
-import com.bhavanawagh.newsapp_mvvm_architecture.di.ApplicationContext
 import com.bhavanawagh.newsapp_mvvm_architecture.di.BaseUrl
 import com.bhavanawagh.newsapp_mvvm_architecture.di.NetworkApiKey
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,15 +21,10 @@ import java.io.File
 import javax.inject.Singleton
 
 
-
 @Module
-class ApplicationModule(private val application: NewsApplication) {
+@InstallIn(SingletonComponent::class)
+class ApplicationModule {
 
-    @ApplicationContext
-    @Provides
-    fun provideContext(): Context {
-        return application
-    }
 
     @BaseUrl
     @Provides
@@ -48,19 +44,20 @@ class ApplicationModule(private val application: NewsApplication) {
 
     @Provides
     @Singleton
-    fun provideForceInterceptor(): ForceCacheInterceptor = ForceCacheInterceptor(application)
-
+    fun provideForceInterceptor(@ApplicationContext appContext: Context): ForceCacheInterceptor =
+        ForceCacheInterceptor(appContext)
 
 
     @Provides
     fun provideOkHttpClient(
+        @ApplicationContext appContext: Context,
         apiKeyInterceptor: ApiKeyInterceptor,
         cacheInterceptor: CacheInterceptor,
         forceCacheInterceptor: ForceCacheInterceptor,
-        loggerInterceptor : HttpLoggingInterceptor
+        loggerInterceptor: HttpLoggingInterceptor
     ): OkHttpClient = OkHttpClient()
         .newBuilder()
-        .cache(Cache(File(application.cacheDir, "http-cache"), 10L * 1024L * 1024L))
+        .cache(Cache(File(appContext.cacheDir, "http-cache"), 10L * 1024L * 1024L))
         .addInterceptor(apiKeyInterceptor)
         .addNetworkInterceptor(cacheInterceptor)
         .addInterceptor(forceCacheInterceptor)
@@ -73,7 +70,7 @@ class ApplicationModule(private val application: NewsApplication) {
 
     @Singleton
     @Provides
-    fun provideLoggerInterceptor() : HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+    fun provideLoggerInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
 

@@ -7,8 +7,9 @@ import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.DEBOUNCE_TIMEOUT
-import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.MIN_SEARCH_CHAR
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.EXTRAS_COUNTRY
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.MIN_SEARCH_CHAR
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SearchViewModel @Inject constructor(private val newsRepository: NewsRepository) :
     ViewModel() {
 
@@ -36,7 +38,7 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
     }
 
     fun searchNews(query: String) {
-        Log.d("SearchViewModel","changed query-${query}")
+        Log.d("SearchViewModel", "changed query-${query}")
         searchQuery.value = query
     }
 
@@ -48,21 +50,21 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
                     if (it.isNotEmpty() && it.length > MIN_SEARCH_CHAR)
                         return@filter true
                     else
-                        _uiState.value=UiState.Success(emptyList())
-                        return@filter false
+                        _uiState.value = UiState.Success(emptyList())
+                    return@filter false
                 }
                 .distinctUntilChanged()
                 .flatMapLatest { it ->
-                    _uiState.value=UiState.Loading
-                    return@flatMapLatest     newsRepository.getTopHeadlinesBySearch(EXTRAS_COUNTRY,it)
-                        .catch {e->
-                            _uiState.value=UiState.Error(e.toString())
+                    _uiState.value = UiState.Loading
+                    return@flatMapLatest newsRepository.getTopHeadlinesBySearch(EXTRAS_COUNTRY, it)
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
                         }
 
                 }
                 .flowOn(Dispatchers.IO)
-                .collect(){
-                    _uiState.value=UiState.Success(it)
+                .collect {
+                    _uiState.value = UiState.Success(it)
                 }
         }
 

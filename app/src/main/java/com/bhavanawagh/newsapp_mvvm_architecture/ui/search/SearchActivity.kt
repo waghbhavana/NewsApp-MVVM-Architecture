@@ -7,27 +7,27 @@ import android.widget.SearchView.OnQueryTextListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.bhavanawagh.newsapp_mvvm_architecture.NewsApplication
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.ActivitySearchBinding
-import com.bhavanawagh.newsapp_mvvm_architecture.di.component.DaggerActivityComponent
-import com.bhavanawagh.newsapp_mvvm_architecture.di.module.ActivityModule
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineAdapter
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SearchActivity() : AppCompatActivity() {
+@AndroidEntryPoint
+class SearchActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySearchBinding
 
-    @Inject
-    lateinit var viewModel: SearchViewModel
+
+    private lateinit var viewModel: SearchViewModel
 
     @Inject
     lateinit var adapter: TopHeadlineAdapter
@@ -38,12 +38,12 @@ class SearchActivity() : AppCompatActivity() {
     lateinit var searchQuery: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies()
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpUI()
+        setUpViewModel()
         setUpObserver()
 
     }
@@ -71,9 +71,13 @@ class SearchActivity() : AppCompatActivity() {
 
     }
 
+    private fun setUpViewModel() {
+        viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+    }
+
     private fun setUpObserver() {
 
-        lifecycleScope.launch() {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
@@ -115,12 +119,6 @@ class SearchActivity() : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-
-    private fun injectDependencies() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

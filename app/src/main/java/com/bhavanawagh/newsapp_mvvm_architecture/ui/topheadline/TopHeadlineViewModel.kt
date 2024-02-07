@@ -5,13 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsRepository) : ViewModel() {
+@HiltViewModel
+class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+    ViewModel() {
 
 
     private val _uiState = MutableStateFlow<UiState<List<Article>>>(UiState.Loading)
@@ -54,10 +57,10 @@ class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsR
         }
     }
 
-    fun fetchTopHeadlinesBySearch(country: String,query: String) {
+    fun fetchTopHeadlinesBySearch(country: String, query: String) {
 
         viewModelScope.launch {
-            newsRepository.getTopHeadlinesBySearch(country,query)
+            newsRepository.getTopHeadlinesBySearch(country, query)
                 .catch {
                     _uiState.value = UiState.Error(it.toString())
                 }

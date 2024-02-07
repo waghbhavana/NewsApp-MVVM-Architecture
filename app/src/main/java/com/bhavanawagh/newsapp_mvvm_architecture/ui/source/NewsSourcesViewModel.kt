@@ -5,11 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewsSourcesViewModel(private val newsRepository: NewsRepository) : ViewModel() {
+@HiltViewModel
+class NewsSourcesViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+    ViewModel() {
 
 
     private val _uiState = MutableStateFlow<UiState<List<Source>>>(UiState.Loading)

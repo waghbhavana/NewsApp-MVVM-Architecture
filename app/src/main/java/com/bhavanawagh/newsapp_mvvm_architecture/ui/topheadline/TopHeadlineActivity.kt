@@ -7,26 +7,21 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.bhavanawagh.newsapp_mvvm_architecture.NewsApplication
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.databinding.ActivityTopHeadlineBinding
-import com.bhavanawagh.newsapp_mvvm_architecture.di.component.DaggerActivityComponent
-import com.bhavanawagh.newsapp_mvvm_architecture.di.module.ActivityModule
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class TopHeadlineActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var context: Context
-
-    @Inject
-    lateinit var viewModel: TopHeadlineViewModel
+    private lateinit var viewModel: TopHeadlineViewModel
 
     @Inject
     lateinit var adapter: TopHeadlineAdapter
@@ -35,12 +30,12 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTopHeadlineBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies()
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = ActivityTopHeadlineBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpUI()
+        setUpViewModel()
         fetchHeadlines()
         setUpObserver()
     }
@@ -71,7 +66,8 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     private fun setUpUI() {
         val recyclerView = binding.recyclerView
-        recyclerView.layoutManager= StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
         binding.showErrorLayout.tryAgainBtn.setOnClickListener {
             if (countrySelected.isNotEmpty()) {
@@ -82,21 +78,26 @@ class TopHeadlineActivity : AppCompatActivity() {
         }
     }
 
+    private fun setUpViewModel() {
+        viewModel = ViewModelProvider(this)[TopHeadlineViewModel::class.java]
+    }
+
+
     private fun setUpObserver() {
-        lifecycleScope.launch() {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
                         is UiState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.showErrorLayout.errorLayout.visibility = View.GONE
-                            if(it.data.isNotEmpty()) {
+                            if (it.data.isNotEmpty()) {
                                 renderList(it.data)
                                 binding.recyclerView.visibility = View.VISIBLE
-                                binding.noDataFound.visibility =View.GONE
-                            }else{
+                                binding.noDataFound.visibility = View.GONE
+                            } else {
                                 binding.recyclerView.visibility = View.GONE
-                                binding.noDataFound.visibility =View.VISIBLE
+                                binding.noDataFound.visibility = View.VISIBLE
                             }
                         }
 
@@ -104,14 +105,14 @@ class TopHeadlineActivity : AppCompatActivity() {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.showErrorLayout.errorLayout.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
-                            binding.noDataFound.visibility =View.GONE
+                            binding.noDataFound.visibility = View.GONE
                         }
 
                         is UiState.Error -> {
                             binding.progressBar.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
                             binding.showErrorLayout.errorLayout.visibility = View.VISIBLE
-                            binding.noDataFound.visibility =View.GONE
+                            binding.noDataFound.visibility = View.GONE
                             Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -127,12 +128,6 @@ class TopHeadlineActivity : AppCompatActivity() {
     }
 
 
-    private fun injectDependencies() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
@@ -145,23 +140,28 @@ class TopHeadlineActivity : AppCompatActivity() {
         const val EXTRAS_LANGUAGE = "EXTRAS_LANGUAGE"
 
 
-        fun getCountryForNewsList(context: Context,country:String,type:String){
+        fun getCountryForNewsList(context: Context, country: String, type: String) {
             context.startActivity(
-                Intent( context,TopHeadlineActivity::class.java)
-                .putExtra("EXTRAS_COUNTRY",country)
-                .putExtra("COUNTRY",type))
+                Intent(context, TopHeadlineActivity::class.java)
+                    .putExtra("EXTRAS_COUNTRY", country)
+                    .putExtra("COUNTRY", type)
+            )
         }
-        fun getLanguageForNewsList(context: Context,language:String,type:String){
+
+        fun getLanguageForNewsList(context: Context, language: String, type: String) {
             context.startActivity(
-                Intent( context,TopHeadlineActivity::class.java)
-                    .putExtra("EXTRAS_LANGUAGE",language)
-                    .putExtra("LANGUAGE",type))
+                Intent(context, TopHeadlineActivity::class.java)
+                    .putExtra("EXTRAS_LANGUAGE", language)
+                    .putExtra("LANGUAGE", type)
+            )
         }
-        fun getSourceForNewsList(context: Context,source:String,type:String){
+
+        fun getSourceForNewsList(context: Context, source: String, type: String) {
             context.startActivity(
-                Intent( context,TopHeadlineActivity::class.java)
-                    .putExtra("EXTRAS_SOURCE",source)
-                    .putExtra("SOURCE",type))
+                Intent(context, TopHeadlineActivity::class.java)
+                    .putExtra("EXTRAS_SOURCE", source)
+                    .putExtra("SOURCE", type)
+            )
         }
     }
 
