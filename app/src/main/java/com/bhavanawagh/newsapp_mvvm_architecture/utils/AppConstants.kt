@@ -7,6 +7,7 @@ object AppConstants {
     const val EXTRAS_COUNTRY = "us"
     const val DEBOUNCE_TIMEOUT = 300L
     const val MIN_SEARCH_CHAR = 3
+    const val APP_NAME = "NewsApp"
 
     val COUNTRY_LIST: List<Country> = listOf(
         Country("United Arab Emirates", "ae"),

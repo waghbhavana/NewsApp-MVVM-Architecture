@@ -11,6 +11,7 @@
     <string name="no_news">Sorry, No news available at this moment.</string>
     <string name="something_went_wrong_please_try_gaian">Something went wrong please try again.</string>
     <string name="read_article">"Read Article "</string>
+    <string name="loading">"Loading   </string>
 </resources>
 
 

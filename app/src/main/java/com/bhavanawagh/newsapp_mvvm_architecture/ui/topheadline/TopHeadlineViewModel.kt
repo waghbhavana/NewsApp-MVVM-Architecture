@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +22,23 @@ class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsR
 
     val uiState: StateFlow<UiState<List<Article>>> = _uiState
 
+//    init {
+//        fetchNews()
+//    }
+
+     fun fetchNews() {
+        viewModelScope.launch {
+            newsRepository.getTopHeadlines(AppConstants.EXTRAS_COUNTRY)
+                .catch { e ->
+                    _uiState.value = UiState.Error(e.toString())
+                }.collect {
+                    _uiState.value = UiState.Success(it)
+                }
+        }
+    }
+
     fun fetchTopHeadlines(country: String) {
+        println("HiltViewModel, fetchTopHeadlines")
         viewModelScope.launch {
             newsRepository.getTopHeadlines(country)
                 .catch {
@@ -34,8 +51,9 @@ class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsR
     }
 
     fun fetchTopHeadlinesBySource(source: String) {
+        println("fetchTopHeadlinesBySource ${source.toString()}")
         viewModelScope.launch {
-            newsRepository.getTopHeadlinesBySource(source)
+            newsRepository.getTopHeadlinesBySource(source.toString())
                 .catch {
                     _uiState.value = UiState.Error(it.toString())
                 }

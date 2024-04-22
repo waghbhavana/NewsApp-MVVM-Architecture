@@ -19,8 +19,8 @@ class TopHeadlineAdapter(private val articleList: ArrayList<Article>) :
             binding.textViewDescription.text= article.description
             binding.textViewSource.text= article.source.name
             Glide.with(binding.imageViewBanner.context)
-                .load(article.urlToImage)
-                .into(binding.imageViewBanner)
+               // .load(article.urlToImage)
+               // .into(binding.imageViewBanner)
             binding.textViewReadArticle.setOnClickListener {
                 val builder = CustomTabsIntent.Builder().setShowTitle(true)
                 val customTabsIntent = builder.build()

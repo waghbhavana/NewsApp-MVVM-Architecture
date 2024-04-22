@@ -40,7 +40,6 @@ class TopHeadlineActivity : AppCompatActivity() {
         setUpObserver()
     }
 
-
     private fun fetchHeadlines() {
 
         if (intent.hasExtra(EXTRAS_COUNTRY)) {
