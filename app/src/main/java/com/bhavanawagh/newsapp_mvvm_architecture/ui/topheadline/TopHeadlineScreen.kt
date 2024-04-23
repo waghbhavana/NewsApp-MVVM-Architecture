@@ -1,5 +1,6 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline
 
+import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavArgs
 import coil.compose.AsyncImage
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
@@ -34,9 +36,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 @Composable
 fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit )
 {
-
     val viewModel: TopHeadlineViewModel = hiltViewModel()
-    viewModel.fetchNews()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(topBar = {
@@ -53,23 +53,21 @@ fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit )
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit , label:String)
+fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit , label:String, category: String)
 {
 
     val viewModel: TopHeadlineViewModel = hiltViewModel()
-    viewModel.fetchTopHeadlinesBySource(label)
+    if(category == "source") {
+        viewModel.fetchTopHeadlinesBySource(label)
+    }
+    if(category == "language"){
+        viewModel.fetchTopHeadlinesByLanguage(label)
+    }
+    if(category == "country"){
+        viewModel.fetchTopHeadlines(label)
+    }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    Scaffold(topBar = {
-        TopAppBar(colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = Color.White
-        ), title = { Text(text = AppConstants.APP_NAME) })
-    }, content = { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            TopHeadlineScreen(uiState, onNewsClick)
-        }
-    })
+    TopHeadlineScreen(uiState, onNewsClick)
 
 }
 @Composable

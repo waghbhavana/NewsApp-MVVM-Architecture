@@ -21,7 +21,9 @@ class LanguageViewModel @Inject constructor(private val newsRepository: NewsRepo
 
     val uiState: StateFlow<UiState<List<Language>>> = _uiState
 
-
+    init {
+        fetchLanguageList()
+    }
     fun fetchLanguageList() {
         viewModelScope.launch {
             newsRepository.getLanguageList()

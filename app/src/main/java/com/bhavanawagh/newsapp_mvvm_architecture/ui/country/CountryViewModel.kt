@@ -21,6 +21,9 @@ class CountryViewModel @Inject constructor(private val newsRepository: NewsRepos
 
     val uiState: StateFlow<UiState<List<Country>>> = _uiState
 
+    init {
+        fetchCountryList()
+    }
 
     fun fetchCountryList() {
         viewModelScope.launch {

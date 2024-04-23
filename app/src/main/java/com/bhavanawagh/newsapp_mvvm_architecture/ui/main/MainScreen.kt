@@ -24,6 +24,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineScree
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.Route
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 enum class ButtonLabel(name: String) {
@@ -64,17 +65,18 @@ fun MainScreen(navController: NavController, onClick: (label : String) -> Unit) 
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                // println("News Sources button clicked")
-                navController.navigate("News Sources")
+                navController.navigate(Route.Sources.name)
 
             }) { Text(text = ButtonLabel.SOURCES.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
-                println("Countries button clicked")
+                navController.navigate(Route.Country.name)
             }) { Text(ButtonLabel.COUNTRIES.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
-                println("Languages button clicked")
+               navController.navigate(Route.Language.name)
             }) { Text(ButtonLabel.LANGUAGES.name) }
+
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                 println("Search button clicked")
             }) { Text(ButtonLabel.SEARCH.name)}

@@ -22,9 +22,9 @@ class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsR
 
     val uiState: StateFlow<UiState<List<Article>>> = _uiState
 
-//    init {
-//        fetchNews()
-//    }
+    init {
+        fetchNews()
+    }
 
      fun fetchNews() {
         viewModelScope.launch {
