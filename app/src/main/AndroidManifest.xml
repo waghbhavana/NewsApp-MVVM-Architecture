@@ -27,24 +27,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.search.SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.language.LanguageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.country.CountryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.source.NewsSourceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.topheadline.TopHeadlineActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:exported="false"/>
+
 
     </application>
 

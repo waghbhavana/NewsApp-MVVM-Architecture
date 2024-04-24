@@ -60,7 +60,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
                 Log.d("SearchViewActivity", "changed query-${newText}")
-                viewModel.onSearchTextChange(newText)
+                viewModel.searchNews(newText)
                 return false
             }
 
