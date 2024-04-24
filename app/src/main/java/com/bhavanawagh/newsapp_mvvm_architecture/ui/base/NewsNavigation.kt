@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.main.MainScreen
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.search.SearchScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourcesRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineRouteBy
@@ -76,6 +77,11 @@ fun NewsNavHost() {
             }
         }
 
+        composable(route = Route.Search.name) {
+            SearchScreenRoute(onNewsClick = {
+                openCustomChromeTab(context, it)
+            })
+        }
 
         composable(route = Route.Headline.name) {
             TopHeadlineRoute(onNewsClick = {

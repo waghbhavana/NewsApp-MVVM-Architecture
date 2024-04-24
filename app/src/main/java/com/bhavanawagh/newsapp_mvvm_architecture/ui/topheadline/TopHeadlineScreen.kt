@@ -1,6 +1,5 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline
 
-import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavArgs
 import coil.compose.AsyncImage
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
@@ -89,13 +88,10 @@ fun TopHeadlineScreen(uiState: UiState<List<Article>>, onNewsClick: (url: String
 
 
 @Composable
-fun ArticleList(articles: List<Article>, onNewsClick: (url: String) -> Unit){
-    LazyColumn(){
-        items(articles, key = {item: Article -> item.url }){
-           Article(
-                article = it,
-                onNewsClick = onNewsClick
-            )
+fun ArticleList(articles: List<Article>, onNewsClick: (url: String) -> Unit) {
+    LazyColumn {
+        items(articles, key = { article -> article.url }) { article ->
+            Article(article, onNewsClick)
         }
     }
 }
