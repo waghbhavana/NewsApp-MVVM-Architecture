@@ -57,16 +57,13 @@ fun MainScreen(navController: NavController, onClick: (label : String) -> Unit) 
         {
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                 navController.navigate("Top Headlines")
-            })
-            {
+            }) {
                 Text(text = ButtonLabel.HEADLINE.name)
             }
 
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
-               // println("News Sources button clicked")
                 navController.navigate(Route.Sources.name)
-
             }) { Text(text = ButtonLabel.SOURCES.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
@@ -78,7 +75,7 @@ fun MainScreen(navController: NavController, onClick: (label : String) -> Unit) 
             }) { Text(ButtonLabel.LANGUAGES.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
-                println("Search button clicked")
+                navController.navigate(Route.Search.name)
             }) { Text(ButtonLabel.SEARCH.name)}
         }
 
@@ -86,13 +83,3 @@ fun MainScreen(navController: NavController, onClick: (label : String) -> Unit) 
 }
 
 
-//
-//@Composable
-//fun CustomButton(label: String,onClick: () -> Unit) {
-//        Button(modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(vertical = 8.dp),
-//            onClick = { onClick() }) {
-//            Text(label)
-//        }
-//}

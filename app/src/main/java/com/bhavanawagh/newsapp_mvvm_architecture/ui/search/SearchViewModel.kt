@@ -13,12 +13,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,21 +34,30 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
 
     val uiState: StateFlow<UiState<List<Article>>> = _uiState
 
-    private val searchQuery = MutableStateFlow("")
+    val _searchQuery = MutableStateFlow("")
+    //val searchQuery= _searchQuery.asStateFlow()
 
+//    val articles = _searchQuery.combine(_uiState){
+//        text, article-> if(text.isBlank()){
+//            article
+//        }
+//    }
+private var _articles= MutableStateFlow<List<Article>>(emptyList())
+
+    val articles: StateFlow<List<Article>> = _articles
     init {
         createNewsFlow()
     }
 
-    fun searchNews(query: String) {
-        Log.d("SearchViewModel", "changed query-${query}")
-        searchQuery.value = query
+    fun onSearchTextChange(query: String) {
+        Log.d("SearchViewModel", "changed query-$query")
+        _searchQuery.value = query
     }
 
     private fun createNewsFlow() {
 
         viewModelScope.launch {
-            searchQuery.debounce(DEBOUNCE_TIMEOUT)
+            _searchQuery.debounce(DEBOUNCE_TIMEOUT)
                 .filter {
                     if (it.isNotEmpty() && it.length > MIN_SEARCH_CHAR)
                         return@filter true
@@ -65,6 +77,7 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
                 .flowOn(Dispatchers.IO)
                 .collect {
                     _uiState.value = UiState.Success(it)
+                    _articles.value= it
                 }
         }
 
