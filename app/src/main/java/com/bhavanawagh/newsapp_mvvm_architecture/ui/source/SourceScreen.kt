@@ -94,7 +94,7 @@ fun SourceC(source: Source, onSourceClick: (source: String) -> Unit) {
                 .wrapContentHeight(Alignment.CenterVertically),
             textAlign = TextAlign.Center,
 
-        )
+            )
     }
 }
 

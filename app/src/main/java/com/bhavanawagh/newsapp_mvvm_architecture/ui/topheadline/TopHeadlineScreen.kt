@@ -33,8 +33,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit )
-{
+fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit) {
     val viewModel: TopHeadlineViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -50,25 +49,26 @@ fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit )
     })
 
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit , label:String, category: String)
-{
+fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit, label: String, category: String) {
 
     val viewModel: TopHeadlineViewModel = hiltViewModel()
-    if(category == "source") {
+    if (category == "source") {
         viewModel.fetchTopHeadlinesBySource(label)
     }
-    if(category == "language"){
+    if (category == "language") {
         viewModel.fetchTopHeadlinesByLanguage(label)
     }
-    if(category == "country"){
+    if (category == "country") {
         viewModel.fetchTopHeadlines(label)
     }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     TopHeadlineScreen(uiState, onNewsClick)
 
 }
+
 @Composable
 fun TopHeadlineScreen(uiState: UiState<List<Article>>, onNewsClick: (url: String) -> Unit) {
     when (uiState) {

@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreenRoute(onNewsClick: (url: String) -> Unit){
+fun SearchScreenRoute(onNewsClick: (url: String) -> Unit) {
     val viewModel: SearchViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(topBar = {
@@ -70,13 +70,15 @@ fun SearchScreen(uiState: UiState<List<Article>>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArticleListWithSearch( onNewsClick: (url: String) -> Unit){
+fun ArticleListWithSearch(onNewsClick: (url: String) -> Unit) {
     val viewModel: SearchViewModel = hiltViewModel()
     val searchQuery by viewModel._searchQuery.collectAsState()
-    val articles: List<Article>  by viewModel.articles.collectAsStateWithLifecycle( )
-    Column( modifier = Modifier
-        .fillMaxSize()
-        .padding(2.dp))
+    val articles: List<Article> by viewModel.articles.collectAsStateWithLifecycle()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(2.dp)
+    )
     {
         TextField(
             modifier = Modifier
@@ -85,7 +87,7 @@ fun ArticleListWithSearch( onNewsClick: (url: String) -> Unit){
             value = searchQuery,
             onValueChange = viewModel::onSearchTextChange,
             placeholder = { Text(text = "Search") })
-        
+
         Spacer(modifier = Modifier.height(4.dp))
         ArticleList(articles, onNewsClick)
     }

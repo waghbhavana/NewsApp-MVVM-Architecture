@@ -37,14 +37,15 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
     val _searchQuery = MutableStateFlow("")
     //val searchQuery= _searchQuery.asStateFlow()
 
-//    val articles = _searchQuery.combine(_uiState){
+    //    val articles = _searchQuery.combine(_uiState){
 //        text, article-> if(text.isBlank()){
 //            article
 //        }
 //    }
-private var _articles= MutableStateFlow<List<Article>>(emptyList())
+    private var _articles = MutableStateFlow<List<Article>>(emptyList())
 
     val articles: StateFlow<List<Article>> = _articles
+
     init {
         createNewsFlow()
     }
@@ -77,7 +78,7 @@ private var _articles= MutableStateFlow<List<Article>>(emptyList())
                 .flowOn(Dispatchers.IO)
                 .collect {
                     _uiState.value = UiState.Success(it)
-                    _articles.value= it
+                    _articles.value = it
                 }
         }
 

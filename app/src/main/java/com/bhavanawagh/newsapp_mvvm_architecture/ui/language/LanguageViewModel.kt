@@ -24,6 +24,7 @@ class LanguageViewModel @Inject constructor(private val newsRepository: NewsRepo
     init {
         fetchLanguageList()
     }
+
     fun fetchLanguageList() {
         viewModelScope.launch {
             newsRepository.getLanguageList()

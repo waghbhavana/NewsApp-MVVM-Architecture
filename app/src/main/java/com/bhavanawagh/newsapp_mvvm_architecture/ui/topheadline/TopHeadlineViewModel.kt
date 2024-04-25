@@ -26,7 +26,7 @@ class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsR
         fetchNews()
     }
 
-     fun fetchNews() {
+    fun fetchNews() {
         viewModelScope.launch {
             newsRepository.getTopHeadlines(AppConstants.EXTRAS_COUNTRY)
                 .catch { e ->
