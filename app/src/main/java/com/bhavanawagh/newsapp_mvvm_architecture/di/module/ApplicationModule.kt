@@ -1,11 +1,16 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.di.module
 
 import android.content.Context
+import androidx.room.Room
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ApiKeyInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.CacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ForceCacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
+import com.bhavanawagh.newsapp_mvvm_architecture.data.local.AppDatabase
+import com.bhavanawagh.newsapp_mvvm_architecture.data.local.AppDatabaseServices
+import com.bhavanawagh.newsapp_mvvm_architecture.data.local.DatabaseService
 import com.bhavanawagh.newsapp_mvvm_architecture.di.BaseUrl
+import com.bhavanawagh.newsapp_mvvm_architecture.di.DatabaseName
 import com.bhavanawagh.newsapp_mvvm_architecture.di.NetworkApiKey
 import dagger.Module
 import dagger.Provides
@@ -87,5 +92,30 @@ class ApplicationModule {
             .addConverterFactory(gsonConverterFactory)
             .build()
             .create(NetworkService::class.java)
+    }
+
+
+    @DatabaseName
+    @Provides
+    fun provideDatabaseName(): String = "news-database"
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(
+        @ApplicationContext context: Context,
+        @DatabaseName
+        databaseName: String
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            databaseName
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabaseService(appDatabase: AppDatabase): DatabaseService {
+        return AppDatabaseServices(appDatabase)
     }
 }

@@ -2,7 +2,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
@@ -18,15 +18,15 @@ class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsR
     ViewModel() {
 
 
-    private val _uiState = MutableStateFlow<UiState<List<Article>>>(UiState.Loading)
+    private val _uiState = MutableStateFlow<UiState<List<ApiArticle>>>(UiState.Loading)
 
-    val uiState: StateFlow<UiState<List<Article>>> = _uiState
+    val uiState: StateFlow<UiState<List<ApiArticle>>> = _uiState
 
     init {
         fetchNews()
     }
 
-    fun fetchNews() {
+    private fun fetchNews() {
         viewModelScope.launch {
             newsRepository.getTopHeadlines(AppConstants.EXTRAS_COUNTRY)
                 .catch { e ->

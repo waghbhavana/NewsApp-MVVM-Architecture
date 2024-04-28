@@ -1,11 +1,11 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.repository
 
 import android.util.Log
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,15 +16,15 @@ import javax.inject.Singleton
 @Singleton
 class NewsRepository @Inject constructor(private val networkService: NetworkService) {
 
-    fun getTopHeadlines(country: String): Flow<List<Article>> {
+    fun getTopHeadlines(country: String): Flow<List<ApiArticle>> {
         return flow {
             emit(networkService.getTopHeadlines(country))
         }.map {
-            it.articles
+            it.apiArticles
         }
     }
 
-    fun getNewsSources(): Flow<List<Source>> {
+    fun getNewsSources(): Flow<List<SourceApi>> {
         return flow {
             emit(networkService.getNewsSources())
         }.map {
@@ -32,28 +32,28 @@ class NewsRepository @Inject constructor(private val networkService: NetworkServ
         }
     }
 
-    fun getTopHeadlinesBySource(source: String): Flow<List<Article>> {
+    fun getTopHeadlinesBySource(source: String): Flow<List<ApiArticle>> {
         return flow {
             emit(networkService.getTopHeadlinesBySource(source))
         }.map {
-            it.articles
+            it.apiArticles
         }
     }
 
-    fun getTopHeadlinesByLanguage(language: String): Flow<List<Article>> {
+    fun getTopHeadlinesByLanguage(language: String): Flow<List<ApiArticle>> {
         return flow {
             emit(networkService.getTopHeadlinesByLanguage(language))
         }.map {
-            it.articles
+            it.apiArticles
         }
     }
 
-    fun getTopHeadlinesBySearch(country: String, query: String): Flow<List<Article>> {
+    fun getTopHeadlinesBySearch(country: String, query: String): Flow<List<ApiArticle>> {
         Log.d("NewsRepository", "API CALL - query-${query}")
         return flow {
             emit(networkService.getTopHeadlinesBySearch(country, query))
         }.map {
-            it.articles
+            it.apiArticles
         }
     }
 

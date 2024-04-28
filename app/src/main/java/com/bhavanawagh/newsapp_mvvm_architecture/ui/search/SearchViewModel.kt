@@ -3,7 +3,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.search
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.DEBOUNCE_TIMEOUT
@@ -13,15 +13,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,9 +27,9 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
     ViewModel() {
 
 
-    private val _uiState = MutableStateFlow<UiState<List<Article>>>(UiState.Success(emptyList()))
+    private val _uiState = MutableStateFlow<UiState<List<ApiArticle>>>(UiState.Success(emptyList()))
 
-    val uiState: StateFlow<UiState<List<Article>>> = _uiState
+    val uiState: StateFlow<UiState<List<ApiArticle>>> = _uiState
 
     val _searchQuery = MutableStateFlow("")
     //val searchQuery= _searchQuery.asStateFlow()
@@ -42,9 +39,9 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
 //            article
 //        }
 //    }
-    private var _articles = MutableStateFlow<List<Article>>(emptyList())
+    private var _articles = MutableStateFlow<List<ApiArticle>>(emptyList())
 
-    val articles: StateFlow<List<Article>> = _articles
+    val articles: StateFlow<List<ApiArticle>> = _articles
 
     init {
         createNewsFlow()

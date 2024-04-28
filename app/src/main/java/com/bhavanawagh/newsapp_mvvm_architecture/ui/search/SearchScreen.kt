@@ -21,15 +21,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowError
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.ArticleList
 
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +49,7 @@ fun SearchScreenRoute(onNewsClick: (url: String) -> Unit) {
 
 
 @Composable
-fun SearchScreen(uiState: UiState<List<Article>>) {
+fun SearchScreen(uiState: UiState<List<ApiArticle>>) {
     when (uiState) {
 
         is UiState.Success -> {
@@ -73,7 +71,7 @@ fun SearchScreen(uiState: UiState<List<Article>>) {
 fun ArticleListWithSearch(onNewsClick: (url: String) -> Unit) {
     val viewModel: SearchViewModel = hiltViewModel()
     val searchQuery by viewModel._searchQuery.collectAsState()
-    val articles: List<Article> by viewModel.articles.collectAsStateWithLifecycle()
+    val apiArticles: List<ApiArticle> by viewModel.articles.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,6 +87,6 @@ fun ArticleListWithSearch(onNewsClick: (url: String) -> Unit) {
             placeholder = { Text(text = "Search") })
 
         Spacer(modifier = Modifier.height(4.dp))
-        ArticleList(articles, onNewsClick)
+        ArticleList(apiArticles, onNewsClick)
     }
 }

@@ -20,8 +20,13 @@ class ForceCacheInterceptor(val context: Context) : Interceptor {
         return chain.proceed(builder.build())
     }
 
+    fun isNetworkConnected(): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = cm.activeNetworkInfo
+        return activeNetwork?.isConnected ?: false
+    }
 
-    private fun checkForInternet(): Boolean {
+    fun checkForInternet(): Boolean {
 
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

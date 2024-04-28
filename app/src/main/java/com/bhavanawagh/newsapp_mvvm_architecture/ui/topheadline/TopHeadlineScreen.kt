@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowError
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
@@ -70,7 +69,7 @@ fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit, label: String, catego
 }
 
 @Composable
-fun TopHeadlineScreen(uiState: UiState<List<Article>>, onNewsClick: (url: String) -> Unit) {
+fun TopHeadlineScreen(uiState: UiState<List<ApiArticle>>, onNewsClick: (url: String) -> Unit) {
     when (uiState) {
         is UiState.Success -> {
             ArticleList(uiState.data, onNewsClick)
@@ -88,36 +87,36 @@ fun TopHeadlineScreen(uiState: UiState<List<Article>>, onNewsClick: (url: String
 
 
 @Composable
-fun ArticleList(articles: List<Article>, onNewsClick: (url: String) -> Unit) {
+fun ArticleList(apiArticles: List<ApiArticle>, onNewsClick: (url: String) -> Unit) {
     LazyColumn {
-        items(articles, key = { article -> article.url }) { article ->
+        items(apiArticles, key = { article -> article.url }) { article ->
             Article(article, onNewsClick)
         }
     }
 }
 
 @Composable
-fun Article(article: Article, onNewsClick: (url: String) -> Unit) {
+fun Article(apiArticle: ApiArticle, onNewsClick: (url: String) -> Unit) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .clickable {
-            if (article.url.isNotEmpty()) {
-                onNewsClick(article.url)
+            if (apiArticle.url.isNotEmpty()) {
+                onNewsClick(apiArticle.url)
             }
         }) {
-        BannerImage(article)
-        TitleText(article.title)
-        DescriptionText(article.description)
-        SourceText(article.source)
+        BannerImage(apiArticle)
+        TitleText(apiArticle.title)
+        DescriptionText(apiArticle.description)
+        SourceText(apiArticle.sourceApi)
     }
 
 }
 
 @Composable
-fun BannerImage(article: Article) {
+fun BannerImage(apiArticle: ApiArticle) {
     AsyncImage(
-        model = article.imageUrl,
-        contentDescription = article.title,
+        model = apiArticle.imageUrl,
+        contentDescription = apiArticle.title,
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .height(200.dp)
@@ -152,9 +151,9 @@ fun DescriptionText(description: String?) {
 }
 
 @Composable
-fun SourceText(source: Source) {
+fun SourceText(sourceApi: SourceApi) {
     Text(
-        text = source.name,
+        text = sourceApi.name,
         style = MaterialTheme.typography.titleSmall,
         color = Color.Gray,
         maxLines = 1,
