@@ -1,12 +1,17 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.repository
 
 import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.PAGE_SIZE
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.Category
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -16,12 +21,12 @@ import javax.inject.Singleton
 @Singleton
 class NewsRepository @Inject constructor(private val networkService: NetworkService) {
 
-    fun getTopHeadlines(country: String): Flow<List<ApiArticle>> {
-        return flow {
-            emit(networkService.getTopHeadlines(country))
-        }.map {
-            it.apiArticles
-        }
+    fun getTopHeadlines(country: String): Flow<PagingData<ApiArticle>>{
+        val countryD =  Pair(Category.COUNTRY, country)
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 20),
+            pagingSourceFactory = {HeadlinesByCategoryPagingSource(networkService,countryD)}
+        ).flow
     }
 
     fun getNewsSources(): Flow<List<SourceApi>> {
@@ -31,31 +36,34 @@ class NewsRepository @Inject constructor(private val networkService: NetworkServ
             it.sources
         }
     }
+    fun getTopHeadlinesBySource(source: String) :Flow<PagingData<ApiArticle>>
+    {
 
-    fun getTopHeadlinesBySource(source: String): Flow<List<ApiArticle>> {
-        return flow {
-            emit(networkService.getTopHeadlinesBySource(source))
-        }.map {
-            it.apiArticles
-        }
+        val sourceD =  Pair(Category.SOURCE, source)
+        return Pager(
+            config = PagingConfig(PAGE_SIZE),
+            pagingSourceFactory = {HeadlinesByCategoryPagingSource(networkService,sourceD)}
+        ).flow
     }
 
-    fun getTopHeadlinesByLanguage(language: String): Flow<List<ApiArticle>> {
-        return flow {
-            emit(networkService.getTopHeadlinesByLanguage(language))
-        }.map {
-            it.apiArticles
-        }
+    fun getTopHeadlinesByLanguage(language: String): Flow<PagingData<ApiArticle>>{
+      val languageD =  Pair(Category.LANGUAGE, language)
+        return  Pager(
+            config = PagingConfig(PAGE_SIZE),
+            pagingSourceFactory = {HeadlinesByCategoryPagingSource(networkService,languageD)}
+        ).flow
     }
 
-    fun getTopHeadlinesBySearch(country: String, query: String): Flow<List<ApiArticle>> {
+    fun getTopHeadlinesBySearch(query: String): Flow<PagingData<ApiArticle>>{
         Log.d("NewsRepository", "API CALL - query-${query}")
-        return flow {
-            emit(networkService.getTopHeadlinesBySearch(country, query))
-        }.map {
-            it.apiArticles
-        }
+        val searchQ =  Pair(Category.SEARCH, query)
+        return Pager(
+            config =  PagingConfig(PAGE_SIZE),
+            pagingSourceFactory = {HeadlinesByCategoryPagingSource(networkService,searchQ)}
+                ).flow
     }
+
+
 
     fun getCountryList(): Flow<List<Country>> {
         return flow {

@@ -22,7 +22,7 @@ class NewsSourcesViewModel @Inject constructor(private val newsRepository: NewsR
         fetchNewsSources()
     }
 
-    fun fetchNewsSources() {
+    private fun fetchNewsSources() {
         viewModelScope.launch {
             newsRepository.getNewsSources()
                 .catch {

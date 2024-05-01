@@ -25,7 +25,7 @@ class CountryViewModel @Inject constructor(private val newsRepository: NewsRepos
         fetchCountryList()
     }
 
-    fun fetchCountryList() {
+    private fun fetchCountryList() {
         viewModelScope.launch {
             newsRepository.getCountryList()
                 .catch {

@@ -118,4 +118,5 @@ class ApplicationModule {
     fun provideDatabaseService(appDatabase: AppDatabase): DatabaseService {
         return AppDatabaseServices(appDatabase)
     }
+
 }

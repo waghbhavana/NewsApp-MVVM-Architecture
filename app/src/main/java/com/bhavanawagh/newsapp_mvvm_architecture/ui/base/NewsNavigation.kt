@@ -13,7 +13,7 @@ import androidx.navigation.navArgument
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.main.MainScreen
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.offlineHeadline.OfflineHeadlineRoute
+//import com.bhavanawagh.newsapp_mvvm_architecture.ui.offlineHeadline.OfflineHeadlineRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.search.SearchScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourcesRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineRoute
@@ -115,10 +115,10 @@ fun NewsNavHost() {
             })
         }
         composable(route = Route.OfflineHeadlines.name) {
-            OfflineHeadlineRoute(onNewsClick = {
-                println("onNewsClick url $it")
-                openCustomChromeTab(context, it)
-            })
+//            OfflineHeadlineRoute(onNewsClick = {
+//                println("onNewsClick url $it")
+//                openCustomChromeTab(context, it)
+//            })
         }
 //        composable(route = Route.PaginatedHeadlines.name) {
 //            NewsSourcesRoute(onSourceClick = {

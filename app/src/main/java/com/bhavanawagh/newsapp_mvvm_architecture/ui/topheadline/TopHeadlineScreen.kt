@@ -6,35 +6,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowError
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit) {
+
     val viewModel: TopHeadlineViewModel = hiltViewModel()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsLazyPagingItems()
 
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -49,11 +49,14 @@ fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit) {
 
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit, label: String, category: String) {
 
     val viewModel: TopHeadlineViewModel = hiltViewModel()
+    val articles = viewModel.uiState.collectAsLazyPagingItems()
+
     if (category == "source") {
         viewModel.fetchTopHeadlinesBySource(label)
     }
@@ -61,36 +64,47 @@ fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit, label: String, catego
         viewModel.fetchTopHeadlinesByLanguage(label)
     }
     if (category == "country") {
-        viewModel.fetchTopHeadlines(label)
+        viewModel.fetchTopHeadlinesByCountry(label)
     }
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    TopHeadlineScreen(uiState, onNewsClick)
 
-}
+    TopHeadlineScreen(articles, onNewsClick)
 
-@Composable
-fun TopHeadlineScreen(uiState: UiState<List<ApiArticle>>, onNewsClick: (url: String) -> Unit) {
-    when (uiState) {
-        is UiState.Success -> {
-            ArticleList(uiState.data, onNewsClick)
-        }
-
-        is UiState.Loading -> {
-            ShowLoading()
-        }
-
-        is UiState.Error -> {
-            ShowError(uiState.message)
-        }
-    }
 }
 
 
 @Composable
-fun ArticleList(apiArticles: List<ApiArticle>, onNewsClick: (url: String) -> Unit) {
+fun TopHeadlineScreen(articles: LazyPagingItems<ApiArticle>, onNewsClick: (url: String) -> Unit) {
+
+    ArticleList(articles, onNewsClick)
+    articles.apply {
+        when {
+            loadState.refresh is LoadState.Loading -> {
+                ShowLoading()
+            }
+
+            loadState.refresh is LoadState.Error -> {
+                val error = articles.loadState.refresh as LoadState.Error
+                ShowError(error.error.localizedMessage!!)
+            }
+
+            loadState.append is LoadState.Loading -> {
+                ShowLoading()
+            }
+
+            loadState.append is LoadState.Error -> {
+                val error = articles.loadState.append as LoadState.Error
+                ShowError(error.error.localizedMessage!!)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ArticleList(apiArticles: LazyPagingItems<ApiArticle>, onNewsClick: (url: String) -> Unit) {
     LazyColumn {
-        items(apiArticles, key = { article -> article.url }) { article ->
-            Article(article, onNewsClick)
+        items(apiArticles.itemCount, key = { index -> apiArticles[index]!!.url}) { index ->
+            Article(apiArticles[index]!!, onNewsClick)
         }
     }
 }

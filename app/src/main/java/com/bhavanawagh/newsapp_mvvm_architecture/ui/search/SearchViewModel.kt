@@ -3,17 +3,16 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.search
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.DEBOUNCE_TIMEOUT
-import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.EXTRAS_COUNTRY
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.MIN_SEARCH_CHAR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -27,21 +26,15 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
     ViewModel() {
 
 
-    private val _uiState = MutableStateFlow<UiState<List<ApiArticle>>>(UiState.Success(emptyList()))
+    private val _uiState = MutableStateFlow<PagingData<ApiArticle>>(PagingData.empty())
 
-    val uiState: StateFlow<UiState<List<ApiArticle>>> = _uiState
+    val uiState: StateFlow<PagingData<ApiArticle>> = _uiState
 
-    val _searchQuery = MutableStateFlow("")
-    //val searchQuery= _searchQuery.asStateFlow()
+    val searchQuery = MutableStateFlow("")
 
-    //    val articles = _searchQuery.combine(_uiState){
-//        text, article-> if(text.isBlank()){
-//            article
-//        }
-//    }
-    private var _articles = MutableStateFlow<List<ApiArticle>>(emptyList())
+    private var _articles = MutableStateFlow<PagingData<ApiArticle>>(PagingData.empty())
 
-    val articles: StateFlow<List<ApiArticle>> = _articles
+    val articles: StateFlow<PagingData<ApiArticle>> = _articles
 
     init {
         createNewsFlow()
@@ -49,47 +42,42 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
 
     fun onSearchTextChange(query: String) {
         Log.d("SearchViewModel", "changed query-$query")
-        _searchQuery.value = query
+        searchQuery.value = query
     }
 
     private fun createNewsFlow() {
 
         viewModelScope.launch {
-            _searchQuery.debounce(DEBOUNCE_TIMEOUT)
+            searchQuery.debounce(DEBOUNCE_TIMEOUT)
                 .filter {
                     if (it.isNotEmpty() && it.length > MIN_SEARCH_CHAR)
                         return@filter true
                     else
-                        _uiState.value = UiState.Success(emptyList())
+                        _uiState.value = PagingData.empty()
                     return@filter false
                 }
                 .distinctUntilChanged()
                 .flatMapLatest { it ->
-                    _uiState.value = UiState.Loading
-                    return@flatMapLatest newsRepository.getTopHeadlinesBySearch(EXTRAS_COUNTRY, it)
-                        .catch { e ->
-                            _uiState.value = UiState.Error(e.toString())
-                        }
+                    _uiState.value = PagingData.empty()
+                    return@flatMapLatest newsRepository.getTopHeadlinesBySearch(it).cachedIn(viewModelScope)
 
                 }
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    _uiState.value = UiState.Success(it)
+                    _uiState.value = it
                     _articles.value = it
                 }
         }
 
     }
 
-    fun fetchTopHeadlinesBySearch(country: String, query: String) {
+    fun fetchTopHeadlinesBySearch( query: String) {
 
         viewModelScope.launch {
-            newsRepository.getTopHeadlinesBySearch(country, query)
-                .catch {
-                    _uiState.value = UiState.Error(it.toString())
-                }
+            newsRepository.getTopHeadlinesBySearch( query).cachedIn(viewModelScope)
+
                 .collect {
-                    _uiState.value = UiState.Success(it)
+                    _uiState.value = it
                 }
         }
     }
