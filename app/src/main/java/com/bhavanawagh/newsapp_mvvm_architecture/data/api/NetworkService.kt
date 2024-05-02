@@ -23,13 +23,17 @@ interface NetworkService {
 
 
     @GET("top-headlines")
-    suspend fun getTopHeadlinesBySource(@Query("sources") sources: String,  @Query("page") page: Int,
-                                        @Query("pageSize") pageSize: Int): TopHeadlinesResponse
+    suspend fun getTopHeadlinesBySource(
+        @Query("sources") sources: String, @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ): TopHeadlinesResponse
 
 
     @GET("top-headlines")
-    suspend fun getTopHeadlinesByLanguage(@Query("language") sources: String,  @Query("page") page: Int,
-                                          @Query("pageSize") pageSize: Int): TopHeadlinesResponse
+    suspend fun getTopHeadlinesByLanguage(
+        @Query("language") sources: String, @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ): TopHeadlinesResponse
 
 
     @GET("top-headlines")

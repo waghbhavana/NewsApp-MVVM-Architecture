@@ -1,4 +1,4 @@
-package com.bhavanawagh.newsapp_mvvm_architecture.data.repository
+package com.bhavanawagh.newsapp_mvvm_architecture.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -59,6 +59,7 @@ class HeadlinesByCategoryPagingSource(
                 page,
                 AppConstants.PAGE_SIZE
             )
+
             Category.SEARCH -> networkService.getTopHeadlinesBySearch(
                 this.para.second,
                 page,

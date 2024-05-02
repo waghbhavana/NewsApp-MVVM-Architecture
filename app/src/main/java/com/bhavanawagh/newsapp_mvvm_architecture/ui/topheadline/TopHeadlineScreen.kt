@@ -103,7 +103,7 @@ fun TopHeadlineScreen(articles: LazyPagingItems<ApiArticle>, onNewsClick: (url: 
 @Composable
 fun ArticleList(apiArticles: LazyPagingItems<ApiArticle>, onNewsClick: (url: String) -> Unit) {
     LazyColumn {
-        items(apiArticles.itemCount, key = { index -> apiArticles[index]!!.url}) { index ->
+        items(apiArticles.itemCount, key = { index -> apiArticles[index]!!.url }) { index ->
             Article(apiArticles[index]!!, onNewsClick)
         }
     }

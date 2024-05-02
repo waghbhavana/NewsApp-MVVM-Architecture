@@ -77,28 +77,28 @@ fun SearchScreen(articles: LazyPagingItems<ApiArticle>) {
 }
 
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun ArticleListWithSearch(onNewsClick: (url: String) -> Unit) {
-        val viewModel: SearchViewModel = hiltViewModel()
-        val searchQuery by viewModel.searchQuery.collectAsState()
-        val apiArticles = viewModel.articles.collectAsLazyPagingItems()
-        Column(
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ArticleListWithSearch(onNewsClick: (url: String) -> Unit) {
+    val viewModel: SearchViewModel = hiltViewModel()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val apiArticles = viewModel.articles.collectAsLazyPagingItems()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(2.dp)
+    )
+    {
+        TextField(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(2.dp)
-        )
-        {
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(2.dp),
-                value = searchQuery,
-                onValueChange = viewModel::onSearchTextChange,
-                placeholder = { Text(text = "Search") })
+                .fillMaxWidth()
+                .padding(2.dp),
+            value = searchQuery,
+            onValueChange = viewModel::onSearchTextChange,
+            placeholder = { Text(text = "Search") })
 
-            Spacer(modifier = Modifier.height(4.dp))
-            ArticleList(apiArticles, onNewsClick)
-        }
+        Spacer(modifier = Modifier.height(4.dp))
+        ArticleList(apiArticles, onNewsClick)
     }
+}
 

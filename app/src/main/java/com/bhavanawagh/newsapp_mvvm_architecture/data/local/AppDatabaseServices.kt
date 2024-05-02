@@ -1,11 +1,11 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.local
 
+import androidx.paging.PagingSource
 import com.bhavanawagh.newsapp_mvvm_architecture.data.local.entity.Article
-import kotlinx.coroutines.flow.Flow
 
 class AppDatabaseServices constructor(private val appDatabase: AppDatabase) : DatabaseService {
 
-    override fun getArticles(): Flow<List<Article>> {
+    override fun getArticles(): PagingSource<Int, Article> {
         return appDatabase.articleDao().getAll()
     }
 

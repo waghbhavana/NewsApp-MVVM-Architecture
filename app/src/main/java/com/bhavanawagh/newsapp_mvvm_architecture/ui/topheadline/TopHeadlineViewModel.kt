@@ -52,15 +52,15 @@ class TopHeadlineViewModel @Inject constructor(private val newsRepository: NewsR
         }
     }
 
-    fun fetchTopHeadlinesBySearch(query: String) {
-
-        viewModelScope.launch {
-            newsRepository.getTopHeadlinesBySearch(query)
-                .collect {
-                    _uiState.value =it
-                }
-        }
-    }
+//    fun fetchTopHeadlinesBySearch(query: String) {
+//
+//        viewModelScope.launch {
+//            newsRepository.getTopHeadlinesBySearch(query)
+//                .collect {
+//                    _uiState.value = it
+//                }
+//        }
+//    }
 
 //    fun fetchTopHeadlinesByLanguage(language: String) {
 //        viewModelScope.launch {

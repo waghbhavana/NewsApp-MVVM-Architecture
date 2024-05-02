@@ -59,7 +59,8 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
                 .distinctUntilChanged()
                 .flatMapLatest { it ->
                     _uiState.value = PagingData.empty()
-                    return@flatMapLatest newsRepository.getTopHeadlinesBySearch(it).cachedIn(viewModelScope)
+                    return@flatMapLatest newsRepository.getTopHeadlinesBySearch(it)
+                        .cachedIn(viewModelScope)
 
                 }
                 .flowOn(Dispatchers.IO)
@@ -71,10 +72,10 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
 
     }
 
-    fun fetchTopHeadlinesBySearch( query: String) {
+    fun fetchTopHeadlinesBySearch(query: String) {
 
         viewModelScope.launch {
-            newsRepository.getTopHeadlinesBySearch( query).cachedIn(viewModelScope)
+            newsRepository.getTopHeadlinesBySearch(query).cachedIn(viewModelScope)
 
                 .collect {
                     _uiState.value = it
