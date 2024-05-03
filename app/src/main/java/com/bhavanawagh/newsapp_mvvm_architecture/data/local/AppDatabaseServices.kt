@@ -7,9 +7,11 @@ class AppDatabaseServices constructor(private val appDatabase: AppDatabase) : Da
 
     override fun getArticles(): PagingSource<Int, Article> {
         return appDatabase.articleDao().getAll()
+
     }
 
     override fun deleteAllAndInsertAll(articles: List<Article>) {
         appDatabase.articleDao().deleteAndInsertAll(articles)
     }
+
 }

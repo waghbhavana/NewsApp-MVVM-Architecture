@@ -1,7 +1,6 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.repository
 
 import android.util.Log
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -11,7 +10,6 @@ import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
-import com.bhavanawagh.newsapp_mvvm_architecture.data.paging.ArticleRemoteMediator
 import com.bhavanawagh.newsapp_mvvm_architecture.data.paging.HeadlinesByCategoryPagingSource
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.PAGE_SIZE
@@ -27,7 +25,6 @@ class NewsRepository @Inject constructor(
     private val networkService: NetworkService,
     private val appDatabase: AppDatabase
 ) {
-
 
 
     fun getTopHeadlines(country: String): Flow<PagingData<ApiArticle>> {

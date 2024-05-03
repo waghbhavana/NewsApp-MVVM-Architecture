@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 
 @Entity(tableName = "article")
 data class Article(
@@ -27,3 +28,15 @@ data class Article(
 
     @Embedded val source: Source
 )
+
+fun Article.toArticleApi(): ApiArticle {
+    val apiArticle = ApiArticle(
+        title = title ?: "",
+        description = description ?: "",
+        url = url ?: "",
+        imageUrl = imageUrl ?: "",
+        sourceApi = source.toSourceApi()
+    )
+    println("toArticleApi $apiArticle")
+    return apiArticle
+}

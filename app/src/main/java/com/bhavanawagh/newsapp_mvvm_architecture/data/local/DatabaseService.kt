@@ -11,4 +11,5 @@ interface DatabaseService {
 
     fun deleteAllAndInsertAll(articles: List<Article>)
 
+
 }

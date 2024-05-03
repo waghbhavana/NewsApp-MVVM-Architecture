@@ -3,6 +3,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.offlineHeadline
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ForceCacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.OfflineNewsRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OfflineHeadlineViewModel @Inject constructor(
+    private val cacheInterceptor: ForceCacheInterceptor,
     private val offlineNewsRepository: OfflineNewsRepository
 ) : ViewModel() {
 
@@ -22,7 +24,14 @@ class OfflineHeadlineViewModel @Inject constructor(
     val articles: StateFlow<PagingData<ApiArticle>> = _articles
 
     init {
-        fetchTopHeadlinesByCountry(AppConstants.EXTRAS_COUNTRY)
+
+        if (cacheInterceptor.isNetworkConnected()) {
+            println("checkForInternet ${cacheInterceptor.isNetworkConnected()}")
+            fetchTopHeadlinesByCountry(AppConstants.EXTRAS_COUNTRY)
+        } else {
+            fetchArticlesDirectlyFromDB()
+        }
+
     }
 
     private fun fetchTopHeadlinesByCountry(country: String) {
@@ -31,6 +40,14 @@ class OfflineHeadlineViewModel @Inject constructor(
                 .collect {
                     _articles.value = it
                 }
+        }
+    }
+
+    private fun fetchArticlesDirectlyFromDB() {
+        viewModelScope.launch {
+            offlineNewsRepository.getArticlesDirectFromDB().collect {
+                _articles.value = it
+            }
         }
     }
 
@@ -67,17 +84,5 @@ class OfflineHeadlineViewModel @Inject constructor(
 //        }
 //    }
 
-//    private fun fetchArticlesDirectlyFromDB() {
-//        viewModelScope.launch {
-//            offlineNewsRepository.getArticlesDirectFromDB()
-//                .flowOn(Dispatchers.IO)
-//                .catch {
-//                    _uiState.value = UiState.Error(it.toString())
-//                }
-//                .collect {
-//                    _uiState.value = UiState.Success(it)
-//                }
-//        }
-//    }
 
 }

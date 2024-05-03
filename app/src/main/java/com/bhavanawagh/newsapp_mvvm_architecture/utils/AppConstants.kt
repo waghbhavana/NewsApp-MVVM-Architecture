@@ -10,7 +10,7 @@ object AppConstants {
     const val MIN_SEARCH_CHAR = 3
     const val APP_NAME = "NewsApp"
     const val INITIAL_PAGE = 1
-    const val PAGE_SIZE = 4
+    const val PAGE_SIZE = 5
 
     val COUNTRY_LIST: List<Country> = listOf(
         Country("United Arab Emirates", "ae"),

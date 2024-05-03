@@ -75,10 +75,10 @@ fun Article(article: ApiArticle, onNewsClick: (url: String) -> Unit) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .clickable {
-            article.url?.let { onNewsClick(article.url) }
+            article.url.let { onNewsClick(article.url) }
         }) {
         BannerImage(article)
-        article.title?.let { TitleText(it) }
+        article.title.let { TitleText(it) }
         DescriptionText(article.description)
         SourceText(article.sourceApi)
     }
