@@ -26,7 +26,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowError
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.ArticleList
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadlinePagination.ArticleList
 
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 

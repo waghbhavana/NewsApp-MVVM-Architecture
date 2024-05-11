@@ -3,7 +3,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.country
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
-import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
+import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.TopHeadlinePaginationRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CountryViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+class CountryViewModel @Inject constructor(private val topHeadlinePaginationRepository: TopHeadlinePaginationRepository) :
     ViewModel() {
 
 
@@ -27,7 +27,7 @@ class CountryViewModel @Inject constructor(private val newsRepository: NewsRepos
 
     private fun fetchCountryList() {
         viewModelScope.launch {
-            newsRepository.getCountryList()
+            topHeadlinePaginationRepository.getCountryList()
                 .catch {
                     _uiState.value = UiState.Error(it.toString())
                 }

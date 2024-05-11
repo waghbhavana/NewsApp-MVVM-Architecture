@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
-import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
+import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.TopHeadlinePaginationRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.DEBOUNCE_TIMEOUT
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.MIN_SEARCH_CHAR
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+class SearchViewModel @Inject constructor(private val topHeadlinePaginationRepository: TopHeadlinePaginationRepository) :
     ViewModel() {
 
 
@@ -59,7 +59,7 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
                 .distinctUntilChanged()
                 .flatMapLatest { it ->
                     _uiState.value = PagingData.empty()
-                    return@flatMapLatest newsRepository.getTopHeadlinesBySearch(it)
+                    return@flatMapLatest topHeadlinePaginationRepository.getTopHeadlinesBySearch(it)
                         .cachedIn(viewModelScope)
 
                 }
@@ -75,7 +75,7 @@ class SearchViewModel @Inject constructor(private val newsRepository: NewsReposi
     fun fetchTopHeadlinesBySearch(query: String) {
 
         viewModelScope.launch {
-            newsRepository.getTopHeadlinesBySearch(query).cachedIn(viewModelScope)
+            topHeadlinePaginationRepository.getTopHeadlinesBySearch(query).cachedIn(viewModelScope)
 
                 .collect {
                     _uiState.value = it

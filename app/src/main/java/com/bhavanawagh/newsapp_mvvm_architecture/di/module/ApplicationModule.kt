@@ -7,11 +7,13 @@ import com.bhavanawagh.newsapp_mvvm_architecture.data.api.CacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ForceCacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
 import com.bhavanawagh.newsapp_mvvm_architecture.data.local.AppDatabase
-import com.bhavanawagh.newsapp_mvvm_architecture.data.local.AppDatabaseServices
+import com.bhavanawagh.newsapp_mvvm_architecture.data.local.AppDatabaseService
 import com.bhavanawagh.newsapp_mvvm_architecture.data.local.DatabaseService
 import com.bhavanawagh.newsapp_mvvm_architecture.di.BaseUrl
 import com.bhavanawagh.newsapp_mvvm_architecture.di.DatabaseName
 import com.bhavanawagh.newsapp_mvvm_architecture.di.NetworkApiKey
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.DefaultDispatcherProvider
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -116,7 +118,11 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun provideDatabaseService(appDatabase: AppDatabase): DatabaseService {
-        return AppDatabaseServices(appDatabase)
+        return AppDatabaseService(appDatabase)
     }
+
+    @Provides
+    @Singleton
+    fun provideDispatcherProvider(): DispatcherProvider = DefaultDispatcherProvider()
 
 }

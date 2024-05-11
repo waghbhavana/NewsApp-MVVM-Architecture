@@ -9,7 +9,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.Category
 
 
-class HeadlinesByCategoryPagingSource(
+open class HeadlinesByCategoryPagingSource(
     private val networkService: NetworkService,
     private val para: Pair<Category, String>,
 ) : PagingSource<Int, ApiArticle>() {
@@ -25,7 +25,6 @@ class HeadlinesByCategoryPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ApiArticle> {
         return try {
 
-            println("HeadlinesByCategoryPagingSource ${para.first}")
             val page = params.key ?: AppConstants.INITIAL_PAGE
             val response = loadingFun(para, page)
             LoadResult.Page(
@@ -54,7 +53,7 @@ class HeadlinesByCategoryPagingSource(
                 AppConstants.PAGE_SIZE
             )
 
-            Category.COUNTRY -> networkService.getTopHeadlines(
+            Category.COUNTRY -> networkService.getTopHeadlinesWithPagination(
                 this.para.second,
                 page,
                 AppConstants.PAGE_SIZE

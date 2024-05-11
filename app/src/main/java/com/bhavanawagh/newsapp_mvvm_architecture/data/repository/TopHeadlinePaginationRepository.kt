@@ -5,7 +5,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
-import com.bhavanawagh.newsapp_mvvm_architecture.data.local.AppDatabase
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
@@ -21,9 +20,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NewsRepository @Inject constructor(
-    private val networkService: NetworkService,
-    private val appDatabase: AppDatabase
+class TopHeadlinePaginationRepository @Inject constructor(
+    private val networkService: NetworkService
 ) {
 
 
@@ -34,6 +32,8 @@ class NewsRepository @Inject constructor(
             pagingSourceFactory = { HeadlinesByCategoryPagingSource(networkService, countryD) }
         ).flow
     }
+
+
 
     fun getNewsSources(): Flow<List<SourceApi>> {
         return flow {

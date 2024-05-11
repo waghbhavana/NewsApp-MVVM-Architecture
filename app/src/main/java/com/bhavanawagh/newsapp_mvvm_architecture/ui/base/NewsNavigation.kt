@@ -18,7 +18,8 @@ import com.bhavanawagh.newsapp_mvvm_architecture.ui.offlineHeadline.OfflineHeadl
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.search.SearchScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourcesRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineRoute
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineRouteBy
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadlinePagination.TopHeadlinePaginationRoute
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadlinePagination.TopHeadlineRouteBy
 
 sealed class Route(val name: String) {
     object Main : Route("Main")
@@ -28,6 +29,7 @@ sealed class Route(val name: String) {
     object Country : Route("Country")
     object Search : Route("Search")
     object OfflineHeadlines : Route("Offline Headlines")
+    object HeadlinesPagination : Route("Headlines Pagination")
 
 }
 
@@ -118,6 +120,11 @@ fun NewsNavHost() {
         composable(route = Route.OfflineHeadlines.name) {
             OfflineHeadlineRoute(onNewsClick = {
                 println("onNewsClick url $it")
+                openCustomChromeTab(context, it)
+            })
+        }
+        composable(route = Route.HeadlinesPagination.name) {
+            TopHeadlinePaginationRoute(onNewsClick = {
                 openCustomChromeTab(context, it)
             })
         }

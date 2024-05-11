@@ -52,7 +52,7 @@ class ArticleRemoteMediator(
                 }
 
             }
-            val response = networkService.getTopHeadlines(AppConstants.EXTRAS_COUNTRY, 1, 10)
+            val response = networkService.getTopHeadlinesWithPagination(AppConstants.EXTRAS_COUNTRY, 1, 10)
             val endOfPaginationReached = response.totalResults == currentPage
 
             val prevPage = if (currentPage == 1) null else currentPage - 1

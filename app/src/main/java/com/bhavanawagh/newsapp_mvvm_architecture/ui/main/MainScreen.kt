@@ -27,7 +27,8 @@ enum class ButtonLabel(name: String) {
     COUNTRIES("Countries"),
     LANGUAGES("Languages"),
     SEARCH("Search"),
-    OFFLINEHEADLINE("Offline Headlines")
+    OFFLINEHEADLINE("Offline Headlines"),
+    HEADLINEPAGINATION("Headlines Pagination")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,48 +51,38 @@ fun MainScreen(navController: NavController, onClick: (label: String) -> Unit) {
 
         )
         {
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp), onClick = {
-                navController.navigate("Top Headlines")
-            }) {
-                Text(text = ButtonLabel.HEADLINE.name)
-            }
+            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
+                navController.navigate(Route.Headline.name)
+            }) { Text(text = ButtonLabel.HEADLINE.name) }
 
-
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp), onClick = {
+            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                 navController.navigate(Route.Sources.name)
             }) { Text(text = ButtonLabel.SOURCES.name) }
 
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp), onClick = {
+            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                 navController.navigate(Route.Country.name)
             }) { Text(ButtonLabel.COUNTRIES.name) }
 
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp), onClick = {
+            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                 navController.navigate(Route.Language.name)
             }) { Text(ButtonLabel.LANGUAGES.name) }
 
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp), onClick = {
+            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                 navController.navigate(Route.Search.name)
             }) { Text(ButtonLabel.SEARCH.name) }
+
+            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
+                navController.navigate(Route.HeadlinesPagination.name)
+            }) { Text(ButtonLabel.HEADLINEPAGINATION.name)
+            }
 
             Button(modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp), onClick = {
                 navController.navigate(Route.OfflineHeadlines.name)
             }) { Text(ButtonLabel.OFFLINEHEADLINE.name) }
-//
-//            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
-//                navController.navigate(Route.Search.name)
-//            }) { Text(ButtonLabel.SEARCH.name)}
+
+
         }
 
     })
