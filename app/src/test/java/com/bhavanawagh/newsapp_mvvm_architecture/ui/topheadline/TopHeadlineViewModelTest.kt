@@ -7,11 +7,9 @@ import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.EXTRAS_COUNTRY
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.DefaultDispatcherProviderTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.testTimeSource
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test

@@ -1,24 +1,16 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.data.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.TopHeadlinesResponse
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
-import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.COUNTRY_LIST
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.EXTRAS_COUNTRY
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
-
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -65,7 +57,7 @@ class TopHeadlineRepositoryTest {
                 assertEquals(topHeadlinesResponse.apiArticles,awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
-                 Mockito.verify(networkService,Mockito.times(1)).getTopHeadlines(EXTRAS_COUNTRY)
+            Mockito.verify(networkService,Mockito.times(1)).getTopHeadlines(EXTRAS_COUNTRY)
 
 
         }
