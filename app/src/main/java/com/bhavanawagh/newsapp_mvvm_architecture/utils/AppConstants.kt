@@ -4,13 +4,14 @@ import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Country
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
 
 object AppConstants {
-    //"894665cd6f98442d967bb5a985a9ad26"
+
+   // 59268db289864425bc1ca98d11669422
     const val EXTRAS_COUNTRY = "us"
     const val DEBOUNCE_TIMEOUT = 300L
     const val MIN_SEARCH_CHAR = 3
     const val APP_NAME = "NewsApp"
     const val INITIAL_PAGE = 1
-    const val PAGE_SIZE = 5
+    const val PAGE_SIZE = 10
 
     val COUNTRY_LIST: List<Country> = listOf(
         Country("United Arab Emirates", "ae"),

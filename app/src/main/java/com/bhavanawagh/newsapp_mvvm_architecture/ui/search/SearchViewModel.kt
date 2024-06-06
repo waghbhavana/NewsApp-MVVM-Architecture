@@ -11,6 +11,8 @@ import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.DEBOUNCE_TIM
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.MIN_SEARCH_CHAR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
@@ -41,10 +43,11 @@ class SearchViewModel @Inject constructor(private val topHeadlinePaginationRepos
     }
 
     fun onSearchTextChange(query: String) {
-        Log.d("SearchViewModel", "changed query-$query")
+//        Log.d("SearchViewModel", "changed query-$query")
         searchQuery.value = query
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private fun createNewsFlow() {
 
         viewModelScope.launch {
@@ -65,6 +68,7 @@ class SearchViewModel @Inject constructor(private val topHeadlinePaginationRepos
                 }
                 .flowOn(Dispatchers.IO)
                 .collect {
+//                    _uiState.value = UiState.Success(it)
                     _uiState.value = it
                     _articles.value = it
                 }

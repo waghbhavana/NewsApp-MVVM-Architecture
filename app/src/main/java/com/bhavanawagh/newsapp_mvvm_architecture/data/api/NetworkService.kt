@@ -40,7 +40,7 @@ interface NetworkService {
     ): TopHeadlinesResponse
 
 
-    @GET("top-headlines")
+    @GET("everything")
     suspend fun getTopHeadlinesBySearch(
         @Query("q") query: String,
         @Query("page") page: Int,

@@ -3,6 +3,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadlinePagination
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ForceCacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.TopHeadlinePaginationRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
@@ -16,47 +17,74 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TopHeadlinePaginationViewModel @Inject constructor(private val topHeadlinePaginationRepository: TopHeadlinePaginationRepository,
-                                                         private val dispatcherProvider: DispatcherProvider) :
+class TopHeadlinePaginationViewModel @Inject constructor(
+    private val topHeadlinePaginationRepository: TopHeadlinePaginationRepository,
+    private val dispatcherProvider: DispatcherProvider,
+    private val cacheInterceptor: ForceCacheInterceptor,
+) :
     ViewModel() {
 
 
-    private val _uiState = MutableStateFlow<PagingData<ApiArticle>>(value = PagingData.empty())
-    val uiState: StateFlow<PagingData<ApiArticle>> = _uiState
+    private val _articles = MutableStateFlow<PagingData<ApiArticle>>(value = PagingData.empty())
+    val articles: StateFlow<PagingData<ApiArticle>> = _articles
 
-    init {
-        fetchTopHeadlinesByCountry(AppConstants.EXTRAS_COUNTRY)
-    }
-
+//    init {
+//        if (cacheInterceptor.isNetworkConnected()) {
+//            fetchTopHeadlinesByCountry(AppConstants.EXTRAS_COUNTRY)
+//        } else {
+//            fetchArticlesDirectlyFromDB()
+//        }
+//    }
 
     fun fetchTopHeadlinesBySource(source: String) {
-        viewModelScope.launch {
-            topHeadlinePaginationRepository.getTopHeadlinesBySource(source)
-                .collect {
-                    _uiState.value = it
-                }
+        if (cacheInterceptor.isNetworkConnected()) {
+            viewModelScope.launch {
+                topHeadlinePaginationRepository.getTopHeadlinesBySource(source)
+                    .collect {
+                        _articles.value = it
+                    }
+            }
+        } else {
+            fetchArticlesDirectlyFromDB()
         }
     }
 
     fun fetchTopHeadlinesByCountry(country: String) {
-        viewModelScope.launch(dispatcherProvider.main) {
-            topHeadlinePaginationRepository.getTopHeadlines(country)
-                .flowOn(dispatcherProvider.io)
-                .catch {
-                   println("ERRor in fetchTopHeadlinesByCountry ${it.message}")
-                }
-                .collect {
-                    _uiState.value = it
-                }
+        if (cacheInterceptor.isNetworkConnected()) {
+            viewModelScope.launch(dispatcherProvider.main) {
+                topHeadlinePaginationRepository.getTopHeadlinesOfflinePaging(country)
+                    .flowOn(dispatcherProvider.io)
+                    .catch {
+                        println("ERRor in fetchTopHeadlinesByCountry ${it.message}")
+                    }
+                    .collect {
+                        _articles.value = it
+                    }
+            }
+        } else {
+            fetchArticlesDirectlyFromDB()
         }
     }
 
     fun fetchTopHeadlinesByLanguage(language: String) {
+        if (cacheInterceptor.isNetworkConnected()) {
+            viewModelScope.launch {
+                topHeadlinePaginationRepository.getTopHeadlinesByLanguage(language)
+                    .collect {
+                        _articles.value = it
+                    }
+            }
+        } else {
+            fetchArticlesDirectlyFromDB()
+        }
+    }
+
+    private fun fetchArticlesDirectlyFromDB() {
+        println("fetchArticlesDirectlyFromDB")
         viewModelScope.launch {
-            topHeadlinePaginationRepository.getTopHeadlinesByLanguage(language)
-                .collect {
-                    _uiState.value = it
-                }
+            topHeadlinePaginationRepository.getArticlesDirectFromDB().collect {
+                _articles.value = it
+            }
         }
     }
 

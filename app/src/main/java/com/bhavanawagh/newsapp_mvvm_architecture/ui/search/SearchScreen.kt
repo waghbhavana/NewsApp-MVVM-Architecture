@@ -61,7 +61,9 @@ fun SearchScreen(articles: LazyPagingItems<ApiArticle>) {
 
             loadState.refresh is LoadState.Error -> {
                 val error = articles.loadState.refresh as LoadState.Error
-                ShowError(error.error.localizedMessage!!)
+              //  ShowError(error.error.localizedMessage!!)
+
+                ShowError(text = "No news for now")
             }
 
             loadState.append is LoadState.Loading -> {
@@ -72,6 +74,7 @@ fun SearchScreen(articles: LazyPagingItems<ApiArticle>) {
                 val error = articles.loadState.append as LoadState.Error
                 ShowError(error.error.localizedMessage!!)
             }
+
         }
     }
 }
