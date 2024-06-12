@@ -131,5 +131,13 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
+    // Hilt
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+
+    implementation 'androidx.work:work-runtime:2.8.1'
+
+    //app start up
+    implementation("androidx.startup:startup-runtime:1.1.0")
 
 }

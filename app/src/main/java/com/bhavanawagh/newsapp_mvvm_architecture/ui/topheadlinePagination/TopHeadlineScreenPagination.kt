@@ -143,7 +143,7 @@ fun ArticleList(apiArticles: LazyPagingItems<ApiArticle>, onNewsClick: (url: Str
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center),
-            text = "No new available for now!"
+            text = "No news available for now!"
         )
     } else {
         LazyColumn {

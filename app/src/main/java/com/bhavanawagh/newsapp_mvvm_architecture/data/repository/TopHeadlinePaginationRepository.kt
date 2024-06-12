@@ -46,9 +46,10 @@ class TopHeadlinePaginationRepository @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     fun getTopHeadlinesOfflinePaging(country: String): Flow<PagingData<ApiArticle>> {
+        println("called after worker")
         val countryD = Pair(Category.COUNTRY, country)
         return Pager(
-            config = PagingConfig(pageSize = AppConstants.PAGE_SIZE, prefetchDistance = 20),
+            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 20),
             remoteMediator = ArticleRemoteMediator(networkService, appDatabase),
             pagingSourceFactory = { HeadlinesByCategoryPagingSource(networkService, countryD) }
         ).flow
