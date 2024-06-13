@@ -20,22 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowError
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.ArticleList
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadlinePagination.ArticleList
 
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreenRoute(onNewsClick: (url: String) -> Unit){
+fun SearchScreenRoute(onNewsClick: (url: String) -> Unit) {
     val viewModel: SearchViewModel = hiltViewModel()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val articles = viewModel.uiState.collectAsLazyPagingItems()
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -44,25 +43,38 @@ fun SearchScreenRoute(onNewsClick: (url: String) -> Unit){
     }, content = { padding ->
         Column(modifier = Modifier.padding(padding)) {
             ArticleListWithSearch(onNewsClick)
-            SearchScreen(uiState = uiState)
+            SearchScreen(articles)
         }
     })
 }
 
 
 @Composable
-fun SearchScreen(uiState: UiState<List<Article>>) {
-    when (uiState) {
+fun SearchScreen(articles: LazyPagingItems<ApiArticle>) {
 
-        is UiState.Success -> {
-        }
+    // ArticleList(articles)
+    articles.apply {
+        when {
+            loadState.refresh is LoadState.Loading -> {
+                ShowLoading()
+            }
 
-        is UiState.Loading -> {
-            ShowLoading()
-        }
+            loadState.refresh is LoadState.Error -> {
+                val error = articles.loadState.refresh as LoadState.Error
+              //  ShowError(error.error.localizedMessage!!)
 
-        is UiState.Error -> {
-            ShowError(uiState.message)
+                ShowError(text = "No news for now")
+            }
+
+            loadState.append is LoadState.Loading -> {
+                ShowLoading()
+            }
+
+            loadState.append is LoadState.Error -> {
+                val error = articles.loadState.append as LoadState.Error
+                ShowError(error.error.localizedMessage!!)
+            }
+
         }
     }
 }
@@ -70,13 +82,15 @@ fun SearchScreen(uiState: UiState<List<Article>>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArticleListWithSearch( onNewsClick: (url: String) -> Unit){
+fun ArticleListWithSearch(onNewsClick: (url: String) -> Unit) {
     val viewModel: SearchViewModel = hiltViewModel()
-    val searchQuery by viewModel._searchQuery.collectAsState()
-    val articles: List<Article>  by viewModel.articles.collectAsStateWithLifecycle( )
-    Column( modifier = Modifier
-        .fillMaxSize()
-        .padding(2.dp))
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val apiArticles = viewModel.articles.collectAsLazyPagingItems()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(2.dp)
+    )
     {
         TextField(
             modifier = Modifier
@@ -85,8 +99,9 @@ fun ArticleListWithSearch( onNewsClick: (url: String) -> Unit){
             value = searchQuery,
             onValueChange = viewModel::onSearchTextChange,
             placeholder = { Text(text = "Search") })
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        ArticleList(articles, onNewsClick)
+        ArticleList(apiArticles, onNewsClick)
     }
 }
+

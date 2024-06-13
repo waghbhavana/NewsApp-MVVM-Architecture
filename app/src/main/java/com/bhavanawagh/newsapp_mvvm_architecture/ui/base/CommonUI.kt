@@ -47,7 +47,7 @@ fun ShowError(text: String) {
             color = Color.Red,
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(4.dp)
+                .padding(8.dp)
         )
     }
 

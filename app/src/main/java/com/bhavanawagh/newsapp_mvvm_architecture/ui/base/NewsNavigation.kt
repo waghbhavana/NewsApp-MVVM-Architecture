@@ -2,11 +2,9 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.base
 
 import android.content.Context
 import android.net.Uri
-import android.os.Bundle
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavArgs
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,11 +13,13 @@ import androidx.navigation.navArgument
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.country.CountryScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.language.LanguageScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.main.MainScreen
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.offlineHeadline.OfflineHeadlineRoute
+//import com.bhavanawagh.newsapp_mvvm_architecture.ui.offlineHeadline.OfflineHeadlineRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.search.SearchScreenRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.source.NewsSourcesRoute
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineRoute
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineRouteBy
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineScreen
+import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadlinePagination.TopHeadlineRouteBy
+import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 sealed class Route(val name: String) {
     object Main : Route("Main")
@@ -28,6 +28,9 @@ sealed class Route(val name: String) {
     object Language : Route("Language")
     object Country : Route("Country")
     object Search : Route("Search")
+    object OfflineHeadlines : Route("Offline Headlines")
+    object HeadlinesPagination : Route("Headlines Pagination")
+
 }
 
 
@@ -39,13 +42,15 @@ fun NewsNavHost() {
 
     NavHost(navController = navController, startDestination = "Main") {
         composable(route = Route.Main.name) {
-            MainScreen(navController){ }
+            MainScreen(navController) { }
         }
 
-        composable(route = "Top Headlines/language/{language}", arguments = listOf(
-            navArgument("language") {
-                type = NavType.StringType
-            })) { it ->
+        composable(
+            route = "Top Headlines/language/{language}", arguments = listOf(
+                navArgument("language") {
+                    type = NavType.StringType
+                })
+        ) { it ->
             val language: String? = it.arguments!!.getString("language")
             if (language != null) {
                 TopHeadlineRouteBy(onNewsClick = {
@@ -54,10 +59,12 @@ fun NewsNavHost() {
             }
         }
 
-        composable(route = "Top Headlines/source/{source}", arguments = listOf(
-            navArgument("source") {
-                type = NavType.StringType
-            })) { it ->
+        composable(
+            route = "Top Headlines/source/{source}", arguments = listOf(
+                navArgument("source") {
+                    type = NavType.StringType
+                })
+        ) { it ->
             val source: String? = it.arguments!!.getString("source")
             if (source != null) {
                 TopHeadlineRouteBy(onNewsClick = {
@@ -65,10 +72,12 @@ fun NewsNavHost() {
                 }, source, "source")
             }
         }
-        composable(route = "Top Headlines/country/{country}", arguments = listOf(
-            navArgument("country") {
-                type = NavType.StringType
-            })) { it ->
+        composable(
+            route = "Top Headlines/country/{country}", arguments = listOf(
+                navArgument("country") {
+                    type = NavType.StringType
+                })
+        ) { it ->
             val country: String? = it.arguments!!.getString("country")
             if (country != null) {
                 TopHeadlineRouteBy(onNewsClick = {
@@ -107,6 +116,20 @@ fun NewsNavHost() {
                 println("NewsSourcesRoute : $it")
                 navController.navigate("Top Headlines/source/${it}")
             })
+        }
+        composable(route = Route.OfflineHeadlines.name) {
+            OfflineHeadlineRoute(onNewsClick = {
+                println("onNewsClick url $it")
+                openCustomChromeTab(context, it)
+            })
+        }
+        composable(route = Route.HeadlinesPagination.name) {
+//            TopHeadlinePaginationRoute(onNewsClick = {
+//                openCustomChromeTab(context, it)
+//            })
+            TopHeadlineRouteBy(onNewsClick = {
+                openCustomChromeTab(context, it)
+            }, AppConstants.EXTRAS_COUNTRY, "country")
         }
 
     }

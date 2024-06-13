@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,19 +22,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Article
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowError
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit )
-{
-    val viewModel: TopHeadlineViewModel = hiltViewModel()
+fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit){
+
+    val viewModel : TopHeadlineViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(topBar = {
@@ -48,47 +46,23 @@ fun TopHeadlineRoute(onNewsClick: (url: String) -> Unit )
             TopHeadlineScreen(uiState, onNewsClick)
         }
     })
-
 }
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit , label:String, category: String)
-{
+fun TopHeadlineScreen(uiState: UiState<List<ApiArticle>>, onNewsClick: (url: String) -> Unit) {
 
-    val viewModel: TopHeadlineViewModel = hiltViewModel()
-    if(category == "source") {
-        viewModel.fetchTopHeadlinesBySource(label)
-    }
-    if(category == "language"){
-        viewModel.fetchTopHeadlinesByLanguage(label)
-    }
-    if(category == "country"){
-        viewModel.fetchTopHeadlines(label)
-    }
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    TopHeadlineScreen(uiState, onNewsClick)
+   when(uiState){
 
-}
-@Composable
-fun TopHeadlineScreen(uiState: UiState<List<Article>>, onNewsClick: (url: String) -> Unit) {
-    when (uiState) {
-        is UiState.Success -> {
-            ArticleList(uiState.data, onNewsClick)
-        }
+     is  UiState.Success -> ArticleList( uiState.data, onNewsClick )
+       is  UiState.Loading ->  ShowLoading()
+       is  UiState.Error -> ShowError(uiState.message.toString())
 
-        is UiState.Loading -> {
-            ShowLoading()
-        }
-
-        is UiState.Error -> {
-            ShowError(uiState.message)
-        }
-    }
+   }
 }
 
 
 @Composable
-fun ArticleList(articles: List<Article>, onNewsClick: (url: String) -> Unit) {
+fun ArticleList(articles: List<ApiArticle>, onNewsClick: (url: String) -> Unit) {
     LazyColumn {
         items(articles, key = { article -> article.url }) { article ->
             Article(article, onNewsClick)
@@ -97,7 +71,7 @@ fun ArticleList(articles: List<Article>, onNewsClick: (url: String) -> Unit) {
 }
 
 @Composable
-fun Article(article: Article, onNewsClick: (url: String) -> Unit) {
+fun Article(article: ApiArticle, onNewsClick: (url: String) -> Unit) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .clickable {
@@ -108,13 +82,13 @@ fun Article(article: Article, onNewsClick: (url: String) -> Unit) {
         BannerImage(article)
         TitleText(article.title)
         DescriptionText(article.description)
-        SourceText(article.source)
+        SourceText(article.sourceApi)
     }
 
 }
 
 @Composable
-fun BannerImage(article: Article) {
+fun BannerImage(article: ApiArticle) {
     AsyncImage(
         model = article.imageUrl,
         contentDescription = article.title,
@@ -152,7 +126,7 @@ fun DescriptionText(description: String?) {
 }
 
 @Composable
-fun SourceText(source: Source) {
+fun SourceText(source: SourceApi) {
     Text(
         text = source.name,
         style = MaterialTheme.typography.titleSmall,
@@ -161,3 +135,4 @@ fun SourceText(source: Source) {
         modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 4.dp, bottom = 8.dp)
     )
 }
+

@@ -3,7 +3,7 @@ package com.bhavanawagh.newsapp_mvvm_architecture.ui.language
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Language
-import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.NewsRepository
+import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.TopHeadlinePaginationRepository
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LanguageViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+class LanguageViewModel @Inject constructor(private val topHeadlinePaginationRepository: TopHeadlinePaginationRepository) :
     ViewModel() {
 
 
@@ -24,9 +24,10 @@ class LanguageViewModel @Inject constructor(private val newsRepository: NewsRepo
     init {
         fetchLanguageList()
     }
-    fun fetchLanguageList() {
+
+    private fun fetchLanguageList() {
         viewModelScope.launch {
-            newsRepository.getLanguageList()
+            topHeadlinePaginationRepository.getLanguageList()
                 .catch {
                     _uiState.value = UiState.Error(it.toString())
                 }

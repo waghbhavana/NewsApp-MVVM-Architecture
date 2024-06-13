@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bhavanawagh.newsapp_mvvm_architecture.data.model.Source
+import com.bhavanawagh.newsapp_mvvm_architecture.data.model.SourceApi
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowError
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.UiState
@@ -48,7 +48,7 @@ fun NewsSourcesRoute(onSourceClick: (source: String) -> Unit) {
 }
 
 @Composable
-fun NewsSourcesScreen(uiState: UiState<List<Source>>, onSourceClick: (url: String) -> Unit) {
+fun NewsSourcesScreen(uiState: UiState<List<SourceApi>>, onSourceClick: (url: String) -> Unit) {
 
     when (uiState) {
         is UiState.Success -> {
@@ -66,35 +66,35 @@ fun NewsSourcesScreen(uiState: UiState<List<Source>>, onSourceClick: (url: Strin
 }
 
 @Composable
-fun SourceList(list: List<Source>, onSourceClick: (source: String) -> Unit) {
+fun SourceList(list: List<SourceApi>, onSourceClick: (source: String) -> Unit) {
 
     LazyColumn() {
-        items(list, key = { item: Source -> item.id }) {
+        items(list, key = { item: SourceApi -> item.id!! }) {
             SourceC(it, onSourceClick)
         }
     }
 }
 
 @Composable
-fun SourceC(source: Source, onSourceClick: (source: String) -> Unit) {
+fun SourceC(sourceApi: SourceApi, onSourceClick: (source: String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                if (source.id.isNotEmpty()) {
-                    onSourceClick(source.id)
+                if (sourceApi.id!!.isNotEmpty()) {
+                    onSourceClick(sourceApi.id)
                 }
             }
     ) {
         Text(
-            text = source.name,
+            text = sourceApi.name,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth()
                 .wrapContentHeight(Alignment.CenterVertically),
             textAlign = TextAlign.Center,
 
-        )
+            )
     }
 }
 

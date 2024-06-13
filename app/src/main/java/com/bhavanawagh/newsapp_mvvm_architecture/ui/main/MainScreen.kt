@@ -1,6 +1,5 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.main
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,13 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.bhavanawagh.newsapp_mvvm_architecture.ui.topheadline.TopHeadlineScreen
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.Route
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
@@ -32,12 +26,14 @@ enum class ButtonLabel(name: String) {
     SOURCES("News Sources"),
     COUNTRIES("Countries"),
     LANGUAGES("Languages"),
-    SEARCH("Search")
+    SEARCH("Search"),
+    OFFLINEHEADLINE("Offline Headlines"),
+    HEADLINEPAGINATION("Headlines Pagination")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController, onClick: (label : String) -> Unit) {
+fun MainScreen(navController: NavController, onClick: (label: String) -> Unit) {
 
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -56,14 +52,13 @@ fun MainScreen(navController: NavController, onClick: (label : String) -> Unit) 
         )
         {
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
-                navController.navigate("Top Headlines")
-            }) {
-                Text(text = ButtonLabel.HEADLINE.name)
-            }
-
+                navController.navigate(Route.Headline.name)
+            }) { Text(text = ButtonLabel.HEADLINE.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
+               // println("News Sources button clicked")
                 navController.navigate(Route.Sources.name)
+
             }) { Text(text = ButtonLabel.SOURCES.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
@@ -71,12 +66,25 @@ fun MainScreen(navController: NavController, onClick: (label : String) -> Unit) 
             }) { Text(ButtonLabel.COUNTRIES.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
-               navController.navigate(Route.Language.name)
+                navController.navigate(Route.Language.name)
             }) { Text(ButtonLabel.LANGUAGES.name) }
 
             Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
                 navController.navigate(Route.Search.name)
-            }) { Text(ButtonLabel.SEARCH.name)}
+            }) { Text(ButtonLabel.SEARCH.name) }
+
+            Button(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), onClick = {
+                navController.navigate(Route.HeadlinesPagination.name)
+            }) { Text(ButtonLabel.HEADLINEPAGINATION.name)
+            }
+
+            Button(modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp), onClick = {
+                navController.navigate(Route.OfflineHeadlines.name)
+            }) { Text(ButtonLabel.OFFLINEHEADLINE.name) }
+
+
         }
 
     })

@@ -30,7 +30,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LanguageScreenRoute(onLanguageClick : (language: String)->Unit){
+fun LanguageScreenRoute(onLanguageClick: (language: String) -> Unit) {
 
     val viewModel: LanguageViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,32 +47,34 @@ fun LanguageScreenRoute(onLanguageClick : (language: String)->Unit){
 }
 
 @Composable
-fun LanguagesScreen(uiState: UiState<List<Language>>, onLanguageClick: (language: String) -> Unit){
-    
-    when(uiState){
+fun LanguagesScreen(uiState: UiState<List<Language>>, onLanguageClick: (language: String) -> Unit) {
+
+    when (uiState) {
         is UiState.Success -> {
-            LanguageList( uiState.data, onLanguageClick)
+            LanguageList(uiState.data, onLanguageClick)
         }
-        is UiState.Loading-> {
+
+        is UiState.Loading -> {
             ShowLoading()
         }
-        is UiState.Error-> {
+
+        is UiState.Error -> {
             ShowError(text = uiState.message)
         }
     }
 }
 
 @Composable
-fun LanguageList(languageList: List<Language>, onLanguageClick: (language: String) -> Unit){
-    LazyColumn(){
-        items(languageList, key = { item: Language -> item.id  }){
-            LanguageC(it,onLanguageClick)
+fun LanguageList(languageList: List<Language>, onLanguageClick: (language: String) -> Unit) {
+    LazyColumn() {
+        items(languageList, key = { item: Language -> item.id }) {
+            LanguageC(it, onLanguageClick)
         }
     }
 }
 
 @Composable
-fun LanguageC(language: Language, onLanguageClick: (language: String) -> Unit){
+fun LanguageC(language: Language, onLanguageClick: (language: String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
