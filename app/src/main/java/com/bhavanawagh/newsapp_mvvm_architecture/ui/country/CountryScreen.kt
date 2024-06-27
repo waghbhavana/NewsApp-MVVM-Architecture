@@ -1,12 +1,15 @@
 package com.bhavanawagh.newsapp_mvvm_architecture.ui.country
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -86,15 +89,32 @@ fun CountryC(country: Country, onCountryClick: (source: String) -> Unit) {
                 }
             }
     ) {
-        Text(
-            text = country.name,
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .fillMaxWidth()
-                .wrapContentHeight(Alignment.CenterVertically),
-            textAlign = TextAlign.Center,
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(4.dp)
+            .clickable {
+                if (country.id.isNotEmpty()) {
+                    onCountryClick(country.id)
+                }
+            }) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = country.name,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .fillMaxWidth()
+                        .wrapContentHeight(Alignment.CenterVertically),
+                    textAlign = TextAlign.Center,
 
-            )
+                    )
+            }
+        }
     }
 }
 

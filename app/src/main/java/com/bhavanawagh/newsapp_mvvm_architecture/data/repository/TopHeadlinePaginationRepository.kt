@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.NetworkService
 import com.bhavanawagh.newsapp_mvvm_architecture.data.local.AppDatabase
@@ -20,6 +21,7 @@ import com.bhavanawagh.newsapp_mvvm_architecture.data.paging.HeadlinesByCategory
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants.PAGE_SIZE
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.Category
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -45,14 +47,14 @@ class TopHeadlinePaginationRepository @Inject constructor(
 //    }
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getTopHeadlinesOfflinePaging(country: String): Flow<PagingData<ApiArticle>> {
+    fun getTopHeadlinesOfflinePaging(country: String, viewModelScope: CoroutineScope): Flow<PagingData<ApiArticle>> {
         println("called after worker")
         val countryD = Pair(Category.COUNTRY, country)
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 20),
             remoteMediator = ArticleRemoteMediator(networkService, appDatabase),
             pagingSourceFactory = { HeadlinesByCategoryPagingSource(networkService, countryD) }
-        ).flow
+        ).flow.cachedIn(viewModelScope)
     }
 
 
@@ -65,24 +67,24 @@ class TopHeadlinePaginationRepository @Inject constructor(
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getTopHeadlinesBySource(source: String): Flow<PagingData<ApiArticle>> {
+    fun getTopHeadlinesBySource(source: String, viewModelScope: CoroutineScope): Flow<PagingData<ApiArticle>> {
 
         val sourceD = Pair(Category.SOURCE, source)
         return Pager(
             config = PagingConfig(PAGE_SIZE),
             remoteMediator = ArticleRemoteMediator(networkService, appDatabase),
             pagingSourceFactory = { HeadlinesByCategoryPagingSource(networkService, sourceD) }
-        ).flow
+        ).flow.cachedIn(viewModelScope)
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getTopHeadlinesByLanguage(language: String): Flow<PagingData<ApiArticle>> {
+    fun getTopHeadlinesByLanguage(language: String, viewModelScope: CoroutineScope): Flow<PagingData<ApiArticle>> {
         val languageD = Pair(Category.LANGUAGE, language)
         return Pager(
             config = PagingConfig(PAGE_SIZE),
             remoteMediator = ArticleRemoteMediator(networkService, appDatabase),
             pagingSourceFactory = { HeadlinesByCategoryPagingSource(networkService, languageD) }
-        ).flow
+        ).flow.cachedIn(viewModelScope)
     }
 
     @OptIn(ExperimentalPagingApi::class)

@@ -39,7 +39,9 @@ class ApplicationModule {
 
     @NetworkApiKey
     @Provides
-    fun provideNetworkApiKey(): String = "59268db289864425bc1ca98d11669422"
+    fun provideNetworkApiKey(): String = "a5f22183ec404bd3b8f253cfb72671d7"
+        //"a5f22183ec404bd3b8f253cfb72671d7"
+        //"59268db289864425bc1ca98d11669422"
 
     @Provides
     fun provideApiKeyInterceptor(@NetworkApiKey networkApiKey: String): ApiKeyInterceptor =

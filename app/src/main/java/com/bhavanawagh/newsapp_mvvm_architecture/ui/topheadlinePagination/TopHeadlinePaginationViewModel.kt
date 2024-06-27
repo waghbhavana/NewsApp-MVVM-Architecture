@@ -6,7 +6,6 @@ import androidx.paging.PagingData
 import com.bhavanawagh.newsapp_mvvm_architecture.data.api.ForceCacheInterceptor
 import com.bhavanawagh.newsapp_mvvm_architecture.data.model.ApiArticle
 import com.bhavanawagh.newsapp_mvvm_architecture.data.repository.TopHeadlinePaginationRepository
-import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +38,7 @@ class TopHeadlinePaginationViewModel @Inject constructor(
     fun fetchTopHeadlinesBySource(source: String) {
         if (cacheInterceptor.isNetworkConnected()) {
             viewModelScope.launch {
-                topHeadlinePaginationRepository.getTopHeadlinesBySource(source)
+                topHeadlinePaginationRepository.getTopHeadlinesBySource(source,viewModelScope)
                     .collect {
                         _articles.value = it
                     }
@@ -52,7 +51,7 @@ class TopHeadlinePaginationViewModel @Inject constructor(
     fun fetchTopHeadlinesByCountry(country: String) {
         if (cacheInterceptor.isNetworkConnected()) {
             viewModelScope.launch(dispatcherProvider.main) {
-                topHeadlinePaginationRepository.getTopHeadlinesOfflinePaging(country)
+                topHeadlinePaginationRepository.getTopHeadlinesOfflinePaging(country,viewModelScope)
                     .flowOn(dispatcherProvider.io)
                     .catch {
                         println("ERRor in fetchTopHeadlinesByCountry ${it.message}")
@@ -69,7 +68,7 @@ class TopHeadlinePaginationViewModel @Inject constructor(
     fun fetchTopHeadlinesByLanguage(language: String) {
         if (cacheInterceptor.isNetworkConnected()) {
             viewModelScope.launch {
-                topHeadlinePaginationRepository.getTopHeadlinesByLanguage(language)
+                topHeadlinePaginationRepository.getTopHeadlinesByLanguage(language,viewModelScope)
                     .collect {
                         _articles.value = it
                     }

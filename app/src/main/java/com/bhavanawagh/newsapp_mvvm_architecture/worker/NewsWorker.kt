@@ -10,6 +10,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 @HiltWorker
@@ -21,10 +22,14 @@ open class NewsWorker @AssistedInject constructor(
 
     override fun doWork(): Result {
         println("NewsWorker:  worker called")
+
         return try {
             println("NewsWorker:  worker called")
-            CoroutineScope(Dispatchers.IO).launch {
-                topHeadlinePaginationRepository.getTopHeadlinesOfflinePaging(AppConstants.EXTRAS_COUNTRY)
+            val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+            applicationScope.launch {
+                topHeadlinePaginationRepository.getTopHeadlinesOfflinePaging(
+                    AppConstants.EXTRAS_COUNTRY,applicationScope
+                )
 
             }
             Result.success()

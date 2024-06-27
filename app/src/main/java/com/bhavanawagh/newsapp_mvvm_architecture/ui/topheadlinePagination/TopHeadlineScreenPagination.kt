@@ -76,14 +76,19 @@ fun TopHeadlineRouteBy(onNewsClick: (url: String) -> Unit, label: String, catego
 
             val articles = topHeadlinePaginationViewModel.articles.collectAsLazyPagingItems()
 
-            if (category == "source") {
-                topHeadlinePaginationViewModel.fetchTopHeadlinesBySource(label)
-            }
-            if (category == "language") {
-                topHeadlinePaginationViewModel.fetchTopHeadlinesByLanguage(label)
-            }
-            if (category == "country") {
-                topHeadlinePaginationViewModel.fetchTopHeadlinesByCountry(label)
+            when (category) {
+                "source" -> {
+                    println("fetchTopHeadlinesBySource : $label")
+                    topHeadlinePaginationViewModel.fetchTopHeadlinesBySource(label)
+                }
+                "language" -> {
+                    println("fetchTopHeadlinesByLanguage : $label")
+                   topHeadlinePaginationViewModel.fetchTopHeadlinesByLanguage(label)
+                }
+                "country" -> {
+                    println("fetchTopHeadlinesByCountry : $label")
+                   topHeadlinePaginationViewModel.fetchTopHeadlinesByCountry(label)
+                }
             }
 
             TopHeadlinePaginationScreen(articles, onNewsClick)
