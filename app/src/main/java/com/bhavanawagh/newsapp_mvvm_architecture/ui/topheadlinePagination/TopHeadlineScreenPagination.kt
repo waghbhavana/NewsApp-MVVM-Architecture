@@ -34,26 +34,6 @@ import com.bhavanawagh.newsapp_mvvm_architecture.ui.base.ShowLoading
 import com.bhavanawagh.newsapp_mvvm_architecture.utils.AppConstants
 
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun TopHeadlinePaginationRoute(onNewsClick: (url: String) -> Unit) {
-//
-//    val viewModel: TopHeadlinePaginationViewModel = hiltViewModel()
-//    val uiState = viewModel.uiState.collectAsLazyPagingItems()
-//
-//    Scaffold(topBar = {
-//        TopAppBar(colors = TopAppBarDefaults.smallTopAppBarColors(
-//            containerColor = MaterialTheme.colorScheme.primary,
-//            titleContentColor = Color.White
-//        ), title = { Text(text = AppConstants.APP_NAME) })
-//    }, content = { padding ->
-//        Column(modifier = Modifier.padding(padding)) {
-//           // TopHeadlinePaginationScreen(uiState, onNewsClick)
-//           // TopHeadlineRouteBy(onNewsClick, label = , category = )
-//        }
-//    })
-//
-//}
 
 lateinit var topHeadlinePaginationViewModel: TopHeadlinePaginationViewModel
 lateinit var ilabel: String
