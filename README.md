@@ -2,6 +2,10 @@
 This NewsApp project is developed with MVVM architecture and Jetpack Compose.
 It provides live top and breaking headlines for a country. Allow you to browse by specific category such as by country, by news source, by languages. You can also search with keywords. 
 
+## Design Architecture used
+<p align="center">
+<img alt="mvvm-architecture"  src="https://github.com/waghbhavana/NewsApp-MVVM-Architecture/blob/main/assets/mvvm%20diagram.png">
+</p>
 
 ## Features
 - Browse top headlines from news sources.
@@ -25,10 +29,6 @@ It provides live top and breaking headlines for a country. Allow you to browse b
 - **Instant Search** it's a real-time search feature providing immediate feedback to users
 - **Unit and UI tests** to verify the app behave and ensure that they meet the expected functionality.
 
-## Design Architecture used
-<p align="center">
-<img alt="mvvm-architecture"  src="https://github.com/waghbhavana/NewsApp-MVVM-Architecture/blob/main/assets/mvvm%20diagram.png">
-</p>
 
 ## Dependency Used
 - Retrofit for Networking: A type-safe HTTP client for smooth network requests
